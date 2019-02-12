@@ -170,7 +170,7 @@ void Motor::check_distance_L(){
 
 void Motor::turn(double degrees, double speed){
     
-    double distance = (PI*WHEEL_DIA)*(degrees/360.0)*(WHEEL_AXEL_LENGTH/2);
+    double distance = (degrees/360.0)*(PI*WHEEL_AXEL_LENGTH);
 
     if(degrees > 0){
         this->move_distance_R(-distance, speed);
