@@ -97,9 +97,9 @@ void Motor::set_target_speed(double new_target_speed_R, double new_target_speed_
    
 }
 
-void Motor::move_distance_R(double distance, double speed){
+void Motor::move_distance_R(long distance, double speed){
 
-    double start_distance = distance_R;
+    long start_distance = distance_R;
     end_distance_R = start_distance + distance;
 
     if(distance > 0){
@@ -116,9 +116,9 @@ void Motor::move_distance_R(double distance, double speed){
 
 }
 
-void Motor::move_distance_L(double distance, double speed){
+void Motor::move_distance_L(long distance, double speed){
 
-    double start_distance = distance_L;
+    long start_distance = distance_L;
     end_distance_L = start_distance + distance;
 
     if(distance > 0){
