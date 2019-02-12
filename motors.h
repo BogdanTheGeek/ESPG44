@@ -20,8 +20,8 @@
 #define PPR 256.0                   //this is the number of pulses per revolution in X4
 #endif
 
-#define WHEEL_DIA 0.08              //in meters to calculate speed in m/s this is 8 cm
-#define WHEEL_AXEL_LENGTH 0.166     //distance between centers of the wheels in meters
+#define WHEEL_DIA 80             //wheel diameter in mm
+#define WHEEL_AXEL_LENGTH 166    //distance between centers of the wheels in mm
 #define PI 3.14159265359            //this is pi
 #define CHECK_SPEED_INTERVAL 100    //this is the update interval for the speed measurement ISR
 
