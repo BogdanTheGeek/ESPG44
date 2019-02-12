@@ -9,8 +9,8 @@ void Motor::speed_ISR(){
     speed_R = encoder_count_R * speed_calc_optim;
     speed_L = encoder_count_L * speed_calc_optim; 
 
-    distance_R = encoder_count_R * distance_calc_optim;   
-    distance_L = encoder_count_L * distance_calc_optim;
+    distance_R += encoder_count_R * distance_calc_optim;
+    distance_L += encoder_count_L * distance_calc_optim;
 
     encoder_count_R = 0;
     encoder_count_L = 0;
