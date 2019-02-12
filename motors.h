@@ -1,10 +1,9 @@
 //this is the header file for the motors class
-//yue add comment test git
+
 #include "mbed.h"
 #include "pins.h"
 
 
-//here i will add a coment
 #define BB_COEF 0.01;   //bang bang coeddiciant
 
 #define X1              //select encoder precision
@@ -22,6 +21,7 @@
 #endif
 
 #define WHEEL_DIA 0.08              //in meters to calculate speed in m/s this is 8 cm
+#define WHEEL_AXEL_LENGTH 0.166     //distance between centers of the wheels in meters
 #define PI 3.14159265359            //this is pi
 #define CHECK_SPEED_INTERVAL 100    //this is the update interval for the speed measurement ISR
 
@@ -37,18 +37,22 @@ class Motor{
     //this in and ISR to measure speed
     Ticker *check_speed;
 
+    //these are timeout interupts and end distance values used to move the buggy a set distance
+    Timeout *check_reached_distance_R, *check_reached_distance_L;
+    double end_distance_R, end_distance_L;
+     bool direction_R, direction_L;
+
     //store the encoder counts and directions for encoders 
     int encoder_count_R, encoder_count_L;
-    bool direction_R, direction_L;
     
     //store the current speeds and the target speeds
     double speed_L, speed_R, target_speed_L, target_speed_R;
 
+    
+    public:  
+
     //store distance traveled
-    long distance_L, distance_R;
-    
-    
-    public:    
+    long distance_L, distance_R;  
     
     Motor(void);            //initialisation function
     
@@ -59,7 +63,14 @@ class Motor{
     void update_speed_BB();     //bang bang
     void set_target_speed(double new_target_speed_R, double new_target_speed_L);    //set the target speed for the PID
     void move_constant_speed(double new_speed_R, double new_speed_L);     //move with no encoder feedback, arguments 0-1.0 sign gives direction
-   
+    void move_distance_R(double distance, double speed);            //move the right wheel a certain distance
+    void move_distance_L(double distance, double speed);            //move the left wheel a certain distance
+    void check_distance_R();
+    void check_distance_L();
+
+    void turn(double degrees, double speed);                        //turn the buggy a number of degrees (positive is right, negative is left)
+
+
     //interrupt handlers for up to X4 encoder readout
 
     void encoder_rise_handler_RA();

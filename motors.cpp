@@ -52,32 +52,35 @@ void Motor::set_speed_R(double speed){
 
     motor_EN->write(0);
 
-    if(speed >= 0){        //set the direction of the motors depending on the sign of the speed
+    if(speed > 0){        //set the direction of the motors depending on the sign of the speed
         dir_R->write(1);
     }
-    else{
+    else if(speed < 0){
         dir_R->write(0);
     }
 
     motor_R->write(speed);
 
-    motor_EN->write(1);
-
+    if(speed != 0){
+        motor_EN->write(1);
+    }
 }
 void Motor::set_speed_L(double speed){
 
     motor_EN->write(0);
 
-    if(speed >= 0){        //set the direction of the motors depending on the sign of the speed
+    if(speed > 0){        //set the direction of the motors depending on the sign of the speed
         dir_R->write(1);
     }
-    else{
+    else if(speed < 0){
         dir_R->write(0);
     }
 
     motor_L->write(speed);
 
-    motor_EN->write(1);
+    if(speed != 0){
+        motor_EN->write(1);
+    }
 
 }
 
@@ -94,86 +97,155 @@ void Motor::set_target_speed(double new_target_speed_R, double new_target_speed_
    
 }
 
+void Motor::move_distance_R(double distance, double speed){
+
+    double start_distance = distance_R;
+    end_distance_R = start_distance + distance;
+
+    if(distance > 0){
+        direction_R = true;
+        this->set_speed_R(speed);
+    }
+    else {
+        direction_R = false;
+        this->set_speed_R(-speed);
+    }
+
+    
+    this->check_distance_R();
+
+}
+
+void Motor::move_distance_L(double distance, double speed){
+
+    double start_distance = distance_L;
+    end_distance_L = start_distance + distance;
+
+    if(distance > 0){
+        direction_L = true;
+        this->set_speed_L(speed);
+    }
+    else {
+        direction_L = false;
+        this->set_speed_L(-speed);
+    }
+
+    
+    this->check_distance_L();
+    
+}
+
+void Motor::check_distance_R(){
+
+    if(direction_R == true){
+        if(distance_R < end_distance_R){
+            check_reached_distance_R->attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);
+        }else{
+            this->set_speed_R(0);
+        }
+    }else{
+        if(distance_R > end_distance_R){
+            check_reached_distance_R->attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);
+        }else{
+            this->set_speed_R(0);
+        }
+    }
+}
+void Motor::check_distance_L(){
+
+    if(direction_L == true){
+        if(distance_L < end_distance_L){
+            check_reached_distance_L->attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);
+        }else{
+            this->set_speed_L(0);
+        }
+    }else{
+        if(distance_L > end_distance_L){
+            check_reached_distance_L->attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);
+        }else{
+            this->set_speed_L(0);
+        }
+    }
+}
+
+void Motor::turn(double degrees, double speed){
+    
+    double distance = (PI*WHEEL_DIA)*(degrees/360.0)*(WHEEL_AXEL_LENGTH/2);
+
+    if(degrees > 0){
+        this->move_distance_R(-distance, speed);
+        this->move_distance_L(distance, speed);
+    }
+    else if(degrees < 0){
+        this->move_distance_R(distance, speed);
+        this->move_distance_L(-distance, speed);
+    }
+}
+
 
 // this is the encoder logic
 void Motor::encoder_rise_handler_RA(){
     if(encoder_RB->read() == 1){
         encoder_count_R--;
-        direction_R = false;
     }
     else{
         encoder_count_R++;
-        direction_R = true;
     }
 }
 void Motor::encoder_rise_handler_RB(){
     if(encoder_RA->read() == 1){
         encoder_count_R++;
-        direction_R = true;
     }
     else{
         encoder_count_R--;
-        direction_R = false;
     }
 }
 void Motor::encoder_rise_handler_LA(){
     if(encoder_LB->read() == 1){
         encoder_count_L--;
-        direction_L = false;
     }
     else{
         encoder_count_L++;
-        direction_L = true;
     }
 }
 void Motor::encoder_rise_handler_LB(){
     if(encoder_LA->read() == 1){
         encoder_count_L++;
-        direction_L = true;
     }
     else{
         encoder_count_L--;
-        direction_L = false;
     }
 }
 void Motor::encoder_fall_handler_RA(){
     if(encoder_RB->read() == 1){
         encoder_count_R++;
-        direction_R = true;
     }
     else{
         encoder_count_R--;
-        direction_R = false;
     }
 }
 void Motor::encoder_fall_handler_RB(){
     if(encoder_RA->read() == 1){
         encoder_count_R--;
-        direction_R = false;
     }
     else{
         encoder_count_R++;
-        direction_R = true;
     }
 }
 void Motor::encoder_fall_handler_LA(){
     if(encoder_LB->read() == 1){
         encoder_count_L++;
-        direction_L = true;
     }
     else{
         encoder_count_L--;
-        direction_L = false;
     }
 }
 void Motor::encoder_fall_handler_LB(){
     if(encoder_LA->read() == 1){
         encoder_count_L--;
-        direction_L = false;
     }
     else{
         encoder_count_L++;
-        direction_L = true;
     }
 }
 
@@ -218,4 +290,5 @@ Motor::Motor(void){
     
     //start the speed measuring ISR
     check_speed->attach(callback(this, &Motor::speed_ISR), CHECK_SPEED_INTERVAL);
+
 }
