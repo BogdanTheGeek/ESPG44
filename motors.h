@@ -2,6 +2,8 @@
 #include "mbed.h"
 #include "pins.h"
 
+
+//here i will add a coment
 #define BB_COEF 0.01;   //bang bang coeddiciant
 
 #define X1              //select encoder precision
