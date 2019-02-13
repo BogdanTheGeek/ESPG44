@@ -3,7 +3,7 @@
 
 
 void Motor::speed_ISR(){
-    const double speed_calc_optim = (60.0/PPR)/((double)CHECK_SPEED_INTERVAL/1000.0);   //calculate speed in rpm
+    const double speed_calc_optim = (60.0/PPR)/((double)CHECK_SPEED_INTERVAL);          //calculate speed in rpm
     const double distance_calc_optim = (1.0/PPR)*(PI*WHEEL_DIA);                        //calculate distance in mm
     
     speed_R = encoder_count_R * speed_calc_optim;
@@ -70,10 +70,10 @@ void Motor::set_speed_L(double speed){
     motor_EN->write(0);
 
     if(speed > 0){        //set the direction of the motors depending on the sign of the speed
-        dir_R->write(1);
+        dir_L->write(1);
     }
     else if(speed < 0){
-        dir_R->write(0);
+        dir_L->write(0);
     }
 
     motor_L->write(speed);

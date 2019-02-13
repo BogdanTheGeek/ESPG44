@@ -1,12 +1,9 @@
-#include "mbed.h"
-#include "pins.h"
-#include "sensors.h"
-#include "motors.h"
 
+#include "demo1.h"
 
 
 int main() {
 
-
+	demo1();
 
 }
