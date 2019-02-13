@@ -6,6 +6,8 @@
 
 #define BB_COEF 0.01;   //bang bang coeddiciant
 
+#define SERIAL_DEBUG
+
 #define X1              //select encoder precision
 
 #ifdef X1
@@ -48,7 +50,8 @@ class Motor{
     //store the current speeds and the target speeds
     double speed_L, speed_R, target_speed_L, target_speed_R;
 
-    
+    Serial *serial;
+
     public:  
 
     //store distance traveled

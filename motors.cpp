@@ -12,6 +12,10 @@ void Motor::speed_ISR(){
     distance_R += encoder_count_R * distance_calc_optim;
     distance_L += encoder_count_L * distance_calc_optim;
 
+#if defined(SERIAL_DEBUG)
+    serial->printf("Rs: %f Ls: %f Rd = %d Ld = %d\n", speed_R, speed_L, distance_R, distance_L);
+#endif
+
     encoder_count_R = 0;
     encoder_count_L = 0;
     
@@ -140,12 +144,22 @@ void Motor::check_distance_R(){
     if(direction_R == true){
         if(distance_R < end_distance_R){
             check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);
+
+#if defined(SERIAL_DEBUG)
+            serial->printf("check distance R again\n");
+#endif
+            
         }else{
             this->set_speed_R(0);
         }
     }else{
         if(distance_R > end_distance_R){
             check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);
+
+#if defined(SERIAL_DEBUG)
+            serial->printf("check distance R again\n");
+#endif
+            
         }else{
             this->set_speed_R(0);
         }
@@ -156,12 +170,22 @@ void Motor::check_distance_L(){
     if(direction_L == true){
         if(distance_L < end_distance_L){
             check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);
+
+#if defined(SERIAL_DEBUG)
+            serial->printf("check distance L again\n");
+#endif
+
         }else{
             this->set_speed_L(0);
         }
     }else{
         if(distance_L > end_distance_L){
             check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);
+
+#if defined(SERIAL_DEBUG)
+            serial->printf("check distance L again\n");
+#endif
+            
         }else{
             this->set_speed_L(0);
         }
@@ -251,6 +275,8 @@ void Motor::encoder_fall_handler_LB(){
 
 
 Motor::Motor(void){
+
+    serial = new Serial(USBTX, USBRX, 9600);
     
     //create objects form the pointers and assign their pins from pin.h
 
@@ -288,7 +314,14 @@ Motor::Motor(void){
     encoder_LB->fall(callback(this, &Motor::encoder_fall_handler_LB));
 #endif
     
+#if defined(SERIAL_DEBUG)
+    serial->printf("Motors and encoders initialised!\n");
+#endif
     //start the speed measuring ISR
     check_speed.attach(callback(this, &Motor::speed_ISR), CHECK_SPEED_INTERVAL);
+
+#if defined(SERIAL_DEBUG)
+    serial->printf("check_speed attached!\n");
+#endif
 
 }
