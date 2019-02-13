@@ -289,6 +289,10 @@ Motor::Motor(void){
     motor_EN = new DigitalOut(MOTOR_EN);
     dir_R = new DigitalOut(DIR_R);
     dir_L = new DigitalOut(DIR_L);
+
+    //make the initial values of the distance 0
+    distance_R = 0;
+    distance_L = 0;
     
     encoder_RA = new InterruptIn(ENCODER_RA);
     encoder_RB = new InterruptIn(ENCODER_RB);
