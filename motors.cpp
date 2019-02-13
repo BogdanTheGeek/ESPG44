@@ -144,22 +144,12 @@ void Motor::check_distance_R(){
     if(direction_R == true){
         if(distance_R < end_distance_R){
             check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);
-
-#if defined(SERIAL_DEBUG)
-            serial->printf("check distance R again\n");
-#endif
-            
         }else{
             this->set_speed_R(0);
         }
     }else{
         if(distance_R > end_distance_R){
             check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);
-
-#if defined(SERIAL_DEBUG)
-            serial->printf("check distance R again\n");
-#endif
-            
         }else{
             this->set_speed_R(0);
         }
@@ -170,22 +160,12 @@ void Motor::check_distance_L(){
     if(direction_L == true){
         if(distance_L < end_distance_L){
             check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);
-
-#if defined(SERIAL_DEBUG)
-            serial->printf("check distance L again\n");
-#endif
-
         }else{
             this->set_speed_L(0);
         }
     }else{
         if(distance_L > end_distance_L){
-            check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);
-
-#if defined(SERIAL_DEBUG)
-            serial->printf("check distance L again\n");
-#endif
-            
+            check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);            
         }else{
             this->set_speed_L(0);
         }
