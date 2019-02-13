@@ -34,7 +34,7 @@ class Motor{
     //the following pointers are used to interface with mbed libraries
     PwmOut *motor_R, *motor_L;
     DigitalOut *motor_EN, *dir_R, *dir_L;
-    InterruptIn *encoder_RA, *encoder_RB, *encoder_LA, *encoder_LB;
+    InterruptIn encoder_RA, encoder_RB, encoder_LA, encoder_LB;
 
     //this in and ISR to measure speed
     Ticker check_speed;
