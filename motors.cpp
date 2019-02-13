@@ -139,13 +139,13 @@ void Motor::check_distance_R(){
 
     if(direction_R == true){
         if(distance_R < end_distance_R){
-            check_reached_distance_R->attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);
+            check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);
         }else{
             this->set_speed_R(0);
         }
     }else{
         if(distance_R > end_distance_R){
-            check_reached_distance_R->attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);
+            check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);
         }else{
             this->set_speed_R(0);
         }
@@ -155,13 +155,13 @@ void Motor::check_distance_L(){
 
     if(direction_L == true){
         if(distance_L < end_distance_L){
-            check_reached_distance_L->attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);
+            check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);
         }else{
             this->set_speed_L(0);
         }
     }else{
         if(distance_L > end_distance_L){
-            check_reached_distance_L->attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);
+            check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);
         }else{
             this->set_speed_L(0);
         }
@@ -289,6 +289,6 @@ Motor::Motor(void){
 #endif
     
     //start the speed measuring ISR
-    check_speed->attach(callback(this, &Motor::speed_ISR), CHECK_SPEED_INTERVAL);
+    check_speed.attach(callback(this, &Motor::speed_ISR), CHECK_SPEED_INTERVAL);
 
 }

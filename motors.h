@@ -35,10 +35,10 @@ class Motor{
     InterruptIn *encoder_RA, *encoder_RB, *encoder_LA, *encoder_LB;
 
     //this in and ISR to measure speed
-    Ticker *check_speed;
+    Ticker check_speed;
 
     //these are timeout interupts and end distance values used to move the buggy a set distance
-    Timeout *check_reached_distance_R, *check_reached_distance_L;
+    Timeout check_reached_distance_R, check_reached_distance_L;
     long end_distance_R, end_distance_L;
     bool direction_R, direction_L;
 
