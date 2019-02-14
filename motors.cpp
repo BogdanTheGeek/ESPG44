@@ -282,20 +282,20 @@ Motor::Motor(void){
 
     //select the necessery interrupts for X1, X2 or X4 encoder sampleing
 #if defined(X1) || defined(X2) || defined(X4)
-    encoder_RA.rise(callback(this, &Motor::encoder_rise_handler_RA));
-    encoder_LA.rise(callback(this, &Motor::encoder_rise_handler_LA));
+    encoder_RA->rise(callback(this, &Motor::encoder_rise_handler_RA));
+    encoder_LA->rise(callback(this, &Motor::encoder_rise_handler_LA));
 #endif
 
 #if defined(X2) || defined(X4)
-    encoder_RA.fall(callback(this, &Motor::encoder_fall_handler_RA));
-    encoder_LA.fall(callback(this, &Motor::encoder_fall_handler_LA));
+    encoder_RA->fall(callback(this, &Motor::encoder_fall_handler_RA));
+    encoder_LA->fall(callback(this, &Motor::encoder_fall_handler_LA));
 #endif
 
 #if defined(X4)
-    encoder_RB.rise(callback(this, &Motor::encoder_rise_handler_RB));
-    encoder_RB.fall(callback(this, &Motor::encoder_fall_handler_RB));
-    encoder_LB.rise(callback(this, &Motor::encoder_rise_handler_LB));
-    encoder_LB.fall(callback(this, &Motor::encoder_fall_handler_LB));
+    encoder_RB->rise(callback(this, &Motor::encoder_rise_handler_RB));
+    encoder_RB->fall(callback(this, &Motor::encoder_fall_handler_RB));
+    encoder_LB->rise(callback(this, &Motor::encoder_rise_handler_LB));
+    encoder_LB->fall(callback(this, &Motor::encoder_fall_handler_LB));
 #endif
     
 #if defined(SERIAL_DEBUG)
