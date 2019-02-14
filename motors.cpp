@@ -3,8 +3,8 @@
 
 
 void Motor::speed_ISR(){
-    const double speed_calc_optim = (60.0/PPR)/((double)CHECK_SPEED_INTERVAL);          //calculate speed in rpm
-    const double distance_calc_optim = (1.0/PPR)*(PI*WHEEL_DIA);                        //calculate distance in mm
+    double speed_calc_optim = (60.0/PPR)/((double)CHECK_SPEED_INTERVAL);          //calculate speed in rpm
+    double distance_calc_optim = (1.0/PPR)*(PI*WHEEL_DIA);                        //calculate distance in mm
     
     speed_R = encoder_count_R * speed_calc_optim;
     speed_L = encoder_count_L * speed_calc_optim; 
