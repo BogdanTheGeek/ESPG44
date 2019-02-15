@@ -54,7 +54,7 @@ void Motor::update_speed_BB(){
 }
 void Motor::set_speed_R(double speed){
 
-    motor_EN->write(0);
+    //motor_EN->write(0);
 
     if(speed >= 0){        //set the direction of the motors depending on the sign of the speed
         dir_R->write(1);
@@ -70,7 +70,7 @@ void Motor::set_speed_R(double speed){
 }
 void Motor::set_speed_L(double speed){
 
-    motor_EN->write(0);
+    //motor_EN->write(0);
 
     if(speed >= 0){        //set the direction of the motors depending on the sign of the speed
         dir_L->write(1);
@@ -100,7 +100,10 @@ void Motor::set_target_speed(double new_target_speed_L, double new_target_speed_
 
 void Motor::move_distance_R(long distance, double speed){
 
-    while(busy_R == true){;}    //wait for previous commands to finish
+    
+
+    while(busy_R == true){serial->printf("busy R\n");wait(0.1);}    //wait for previous commands to finish
+    serial->printf("move_distance_R\n");
 
     long start_distance = distance_R;
     end_distance_R = start_distance + distance;
@@ -121,7 +124,10 @@ void Motor::move_distance_R(long distance, double speed){
 
 void Motor::move_distance_L(long distance, double speed){
 
-    while(busy_L == true){;}    //wait for previous commands to finish
+    
+
+    while(busy_L == true){serial->printf("busy L\n");wait(0.1);}    //wait for previous commands to finish
+    serial->printf("move_distance_L\n");
 
     long start_distance = distance_L;
     end_distance_L = start_distance + distance;
@@ -142,48 +148,52 @@ void Motor::move_distance_L(long distance, double speed){
 
 void Motor::check_distance_R(){
 
+    serial->printf("check_distance_R \n");
+
     if(direction_R == true){
         if(distance_R < end_distance_R){
-            check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);
             busy_R = true;
+            check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);    
         }else{
-            this->set_speed_R(0);
             busy_R = false;
+            this->set_speed_R(0);  
         }
     }else{
         if(distance_R > end_distance_R){
-            check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);
             busy_R = true;
+            check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);
         }else{
-            this->set_speed_R(0);
             busy_R = false;
+            this->set_speed_R(0);
         }
     }
 }
 void Motor::check_distance_L(){
 
+    serial->printf("check_distance_L\n");
+
     if(direction_L == true){
         if(distance_L < end_distance_L){
-            check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);
             busy_L = true;
+            check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);
         }else{
-            this->set_speed_L(0);
             busy_L = false;
+            this->set_speed_L(0);
         }
     }else{
         if(distance_L > end_distance_L){
-            check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);
-            busy_L = true;           
+            busy_L = true;
+            check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);          
         }else{
-            this->set_speed_L(0);
             busy_L = false;
+            this->set_speed_L(0);
         }
     }
 }
 
 void Motor::turn(double degrees, double speed){
 
-    while((busy_L == true) || (busy_R == true)){;}    //wait for previous commands to finish
+    while((busy_L == true) || (busy_R == true)){serial->printf("busy L and R\n");wait(0.1);}    //wait for previous commands to finish
     
     long distance = (degrees/360.0)*(PI*WHEEL_AXEL_LENGTH);
 
