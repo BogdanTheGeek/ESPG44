@@ -29,7 +29,7 @@ ScanLine::ScanLine(){
     enable = new DigitalOut(SEN_EN);
     
     //put a 1 in the shift register and shift it one position
-    *enable = 0;
+    *enable = 1;
     *data = 1;
     *clock = 1;
     *clock = 0;
@@ -67,9 +67,9 @@ void ScanLine::scan(){
     for(int i = 0; i < n_sensor+1; i++){        //go through the sensors
         
         scan_line[i]->read_noise();             //read the noise
-        *enable = 1;                            //turn on the led
+        *enable = 0;                            //turn on the led
         values[i] = scan_line[i]->read_value(); //read the value
-        *enable = 0;                            //turn off the led
+        *enable = 1;                            //turn off the led
         this->next();                           //nove to the next led
     }
     
