@@ -50,7 +50,11 @@ class Motor{
     //store the current speeds and the target speeds
     double speed_L, speed_R, target_speed_L, target_speed_R;
 
+    //Serial object pointer used for debuging
     Serial *serial;
+
+    //indicates that a command is already running
+    bool busy_L, busy_R;
 
     public:  
 

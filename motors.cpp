@@ -100,6 +100,8 @@ void Motor::set_target_speed(double new_target_speed_L, double new_target_speed_
 
 void Motor::move_distance_R(long distance, double speed){
 
+    while(busy_R){;}    //wait for previous commands to finish
+
     long start_distance = distance_R;
     end_distance_R = start_distance + distance;
 
@@ -118,6 +120,8 @@ void Motor::move_distance_R(long distance, double speed){
 }
 
 void Motor::move_distance_L(long distance, double speed){
+
+    while(busy_L){;}    //wait for previous commands to finish
 
     long start_distance = distance_L;
     end_distance_L = start_distance + distance;
@@ -141,14 +145,18 @@ void Motor::check_distance_R(){
     if(direction_R == true){
         if(distance_R < end_distance_R){
             check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);
+            busy_R = true;
         }else{
             this->set_speed_R(0);
+            busy_R = false;
         }
     }else{
         if(distance_R > end_distance_R){
             check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);
+            busy_R = true;
         }else{
             this->set_speed_R(0);
+            busy_R = false;
         }
     }
 }
@@ -157,19 +165,25 @@ void Motor::check_distance_L(){
     if(direction_L == true){
         if(distance_L < end_distance_L){
             check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);
+            busy_L = true;
         }else{
             this->set_speed_L(0);
+            busy_L = false;
         }
     }else{
         if(distance_L > end_distance_L){
-            check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);            
+            check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);
+            busy_L = true;           
         }else{
             this->set_speed_L(0);
+            busy_L = false;
         }
     }
 }
 
 void Motor::turn(double degrees, double speed){
+
+    while(busy_L || busy_R){;}    //wait for previous commands to finish
     
     double distance = (degrees/360.0)*(PI*WHEEL_AXEL_LENGTH);
 
