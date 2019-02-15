@@ -56,15 +56,14 @@ void Motor::set_speed_R(double speed){
 
     motor_EN->write(0);
 
-    if(speed > 0){        //set the direction of the motors depending on the sign of the speed
+    if(speed >= 0){        //set the direction of the motors depending on the sign of the speed
         dir_R->write(1);
-   		motor_R->write(speed);
+   		motor_R->write(1.0 - speed);
     }
     else if(speed < 0){
         dir_R->write(0);
-    	motor_R->write(-speed);
+    	motor_R->write(1.0 + speed);
     }
-
 
     motor_EN->write(1);
 
@@ -73,27 +72,26 @@ void Motor::set_speed_L(double speed){
 
     motor_EN->write(0);
 
-    if(speed > 0){        //set the direction of the motors depending on the sign of the speed
+    if(speed >= 0){        //set the direction of the motors depending on the sign of the speed
         dir_L->write(1);
-    	motor_L->write(speed);
+    	motor_L->write(1.0 - speed);
     }
     else if(speed < 0){
         dir_L->write(0);
-    	motor_L->write(-speed);
+    	motor_L->write(1.0 + speed);
     }
-
 
     motor_EN->write(1);
 
 }
 
-void Motor::move_constant_speed(double new_speed_R, double new_speed_L){        //move with no encoder feedback, arguments 0-1.0 sign gives direction
+void Motor::move_constant_speed(double new_speed_L, double new_speed_R){        //move with no encoder feedback, arguments 0-1.0 sign gives direction
     this->set_speed_R(new_speed_R);
     this->set_speed_L(new_speed_L);
 }
 
 
-void Motor::set_target_speed(double new_target_speed_R, double new_target_speed_L){
+void Motor::set_target_speed(double new_target_speed_L, double new_target_speed_R){
    
    target_speed_R = new_target_speed_R;
    target_speed_L = new_target_speed_L;
@@ -264,6 +262,9 @@ Motor::Motor(void){
 
     motor_R->period(0.020);      //set the periods of the PWM signal
     motor_L->period(0.020);
+
+    motor_R->write(1.0);     
+    motor_L->write(1.0);
     
     motor_EN = new DigitalOut(MOTOR_EN);
     dir_R = new DigitalOut(DIR_R);

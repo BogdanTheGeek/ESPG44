@@ -8,7 +8,7 @@
 
 #define SERIAL_DEBUG
 
-#define X4              //select encoder precision
+#define X1              //select encoder precision
 
 #ifdef X1
 #define PPR 64.0                   //this is the number of pulses per revolution in X1
@@ -64,8 +64,8 @@ class Motor{
     void set_speed_L(double speed);
     void update_speed_PID();    //PID
     void update_speed_BB();     //bang bang
-    void set_target_speed(double new_target_speed_R, double new_target_speed_L);    //set the target speed for the PID
-    void move_constant_speed(double new_speed_R, double new_speed_L);     //move with no encoder feedback, arguments 0-1.0 sign gives direction
+    void set_target_speed(double new_target_speed_L, double new_target_speed_R);    //set the target speed for the PID
+    void move_constant_speed(double new_speed_L, double new_speed_R);     //move with no encoder feedback, arguments 0-1.0 sign gives direction
     void move_distance_R(long distance, double speed);            //move the right wheel a certain distance
     void move_distance_L(long distance, double speed);            //move the left wheel a certain distance
     void check_distance_R();

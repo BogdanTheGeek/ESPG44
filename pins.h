@@ -3,8 +3,8 @@
 //ENCODER
 #define ENCODER_LA  PC_10
 #define ENCODER_LB  PC_12
-#define ENCODER_RA  PA_13
-#define ENCODER_RB  PA_14
+#define ENCODER_RB  PA_13
+#define ENCODER_RA  PA_14
 
 //MOTOR
 #define PWM_L       PA_9
