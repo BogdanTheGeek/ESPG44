@@ -13,7 +13,7 @@ void Motor::speed_ISR(){
     distance_L += encoder_count_L * distance_calc_optim;
 
 #if defined(SERIAL_DEBUG)
-    serial->printf("Rs: %f Ls: %f Rd = %d Ld = %d\n", speed_R, speed_L, distance_R, distance_L);
+    serial->printf("Rs: %.2f Ls: %.2f Rd = %d Ld = %d BR:%d BL:%d \n", speed_R, speed_L, distance_R, distance_L, busy_R, busy_L);
 #endif
 
     encoder_count_R = 0;
@@ -100,7 +100,7 @@ void Motor::set_target_speed(double new_target_speed_L, double new_target_speed_
 
 void Motor::move_distance_R(long distance, double speed){
 
-    while(busy_R){;}    //wait for previous commands to finish
+    while(busy_R == true){;}    //wait for previous commands to finish
 
     long start_distance = distance_R;
     end_distance_R = start_distance + distance;
@@ -121,7 +121,7 @@ void Motor::move_distance_R(long distance, double speed){
 
 void Motor::move_distance_L(long distance, double speed){
 
-    while(busy_L){;}    //wait for previous commands to finish
+    while(busy_L == true){;}    //wait for previous commands to finish
 
     long start_distance = distance_L;
     end_distance_L = start_distance + distance;
@@ -183,18 +183,13 @@ void Motor::check_distance_L(){
 
 void Motor::turn(double degrees, double speed){
 
-    while(busy_L || busy_R){;}    //wait for previous commands to finish
+    while((busy_L == true) || (busy_R == true)){;}    //wait for previous commands to finish
     
-    double distance = (degrees/360.0)*(PI*WHEEL_AXEL_LENGTH);
+    long distance = (degrees/360.0)*(PI*WHEEL_AXEL_LENGTH);
 
-    if(degrees > 0){
-        this->move_distance_R(-distance, speed);
-        this->move_distance_L(distance, speed);
-    }
-    else if(degrees < 0){
-        this->move_distance_R(distance, speed);
-        this->move_distance_L(-distance, speed);
-    }
+    this->move_distance_R(-distance, speed);
+    this->move_distance_L(distance, speed);
+    
 }
 
 
@@ -287,6 +282,9 @@ Motor::Motor(void){
     //make the initial values of the distance 0
     distance_R = 0;
     distance_L = 0;
+
+	busy_R = false;
+	busy_L = false;	
     
     encoder_RA = new InterruptIn(ENCODER_RA);
     encoder_RB = new InterruptIn(ENCODER_RB);
