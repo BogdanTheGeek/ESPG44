@@ -1,16 +1,16 @@
 //this file should contain all the pin definitions and connections of the buggy
 
 //ENCODER
-#define ENCODER_RA  PC_10
-#define ENCODER_RB  PC_12
-#define ENCODER_LA  PA_13
-#define ENCODER_LB  PA_14
+#define ENCODER_LA  PC_10
+#define ENCODER_LB  PC_12
+#define ENCODER_RA  PA_13
+#define ENCODER_RB  PA_14
 
 //MOTOR
-#define PWM_R       PA_9
-#define PWM_L       PA_8
-#define DIR_R       PA_12
-#define DIR_L       PB_12
+#define PWM_L       PA_9
+#define PWM_R       PA_8
+#define DIR_L       PA_12
+#define DIR_R       PB_12
 #define MOTOR_EN    PB_2
 #define MOTOR_1WIRE PA_11
 
