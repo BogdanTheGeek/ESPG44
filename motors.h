@@ -8,7 +8,7 @@
 
 #define SERIAL_DEBUG
 
-#define X1              //select encoder precision
+#define X4              //select encoder precision
 
 #ifdef X1
 #define PPR 64.0                   //this is the number of pulses per revolution in X1

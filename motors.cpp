@@ -58,16 +58,16 @@ void Motor::set_speed_R(double speed){
 
     if(speed > 0){        //set the direction of the motors depending on the sign of the speed
         dir_R->write(1);
+   		motor_R->write(speed);
     }
     else if(speed < 0){
         dir_R->write(0);
+    	motor_R->write(-speed);
     }
 
-    motor_R->write(speed);
 
-    if(speed != 0){
-        motor_EN->write(1);
-    }
+    motor_EN->write(1);
+
 }
 void Motor::set_speed_L(double speed){
 
@@ -75,16 +75,15 @@ void Motor::set_speed_L(double speed){
 
     if(speed > 0){        //set the direction of the motors depending on the sign of the speed
         dir_L->write(1);
+    	motor_L->write(speed);
     }
     else if(speed < 0){
         dir_L->write(0);
+    	motor_L->write(-speed);
     }
 
-    motor_L->write(speed);
 
-    if(speed != 0){
-        motor_EN->write(1);
-    }
+    motor_EN->write(1);
 
 }
 
