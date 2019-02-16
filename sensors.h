@@ -2,6 +2,8 @@
 #include "mbed.h"
 #include "pins.h"
 
+#define PROPAGTION_DELAY 0.05
+
 //this class represents and individual sensor
 class Sensor{
     private:
@@ -21,18 +23,18 @@ class Sensor{
 class ScanLine{
 
     private:
-
-    Sensor *scan_line[5];               //array containing the scan line sensors at the front of the buggy
+    Sensor *scan_line[6];               //array containing the scan line sensors at the front of the buggy
     DigitalOut *clock, *data, *enable;  //control pins for the shift register sensor LEDs
     int current_sensor, n_sensor;       //variables to keep track of the curent sensor LED and the number of sensors in the scan line
 
+    void next(void);    //simple function for incrementing the clock of the shift register
+
     public:
 
-    double values[];    //array storing the values of the sensors in the scan line
+    double values[6];    //array storing the values of the sensors in the scan line
 
     ScanLine(void);     //initialization function
 
     void scan(void);    //scan the whole line of sensors 
-    void next(void);    //simple function for incrementing the clock of the shift register
     
 };

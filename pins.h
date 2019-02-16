@@ -25,6 +25,6 @@
 //SENSORS OUTPUTS
 #define SEN_CLOCK   PC_14
 #define SEN_DATA    PC_15
-#define SEN_EN		PH_0
+#define SEN_EN		PC_3
 
 //POWER CONTROL
