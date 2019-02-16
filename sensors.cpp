@@ -32,9 +32,9 @@ ScanLine::ScanLine(){
     //put a 1 in the shift register and shift it one position
     enable->write(0);
     data->write(1);
-     wait(PROPAGTION_DELAY);
+    wait(PROPAGTION_DELAY);
     clock->write(1);
-     wait(PROPAGTION_DELAY);
+    wait(PROPAGTION_DELAY);
     clock->write(0);
     data->write(0);
     
@@ -53,12 +53,12 @@ void ScanLine::next(){
         current_sensor++;               //and increment the current sensor number
     }
     else{                               //if at the end of the scanline
-        //for(int i = n_sensor; i < 7; i++){  
+        for(int i = n_sensor; i < 7; i++){  
             clock->write(1);                 //tick the clock the remaining number of times to get back to sensor 0
             wait(PROPAGTION_DELAY);
             clock->write(0);
             wait(PROPAGTION_DELAY);
-
+        }
 
         data->write(1);              //pop another 1 into the shift register
          wait(PROPAGTION_DELAY);
