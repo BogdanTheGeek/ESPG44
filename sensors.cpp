@@ -97,3 +97,45 @@ void ScanLine::scan(){
     }
      
 }
+
+double ScanLine::array_to_value(void){
+
+    double value;
+
+    int max = 0; 
+    int max2 = 0;
+
+    //find the sensor with the highest value
+    for (int i = 0; i < n_sensor - 1; i++){
+
+        if(values[i+1] > values[max+1]){
+            max = i;
+        }
+    }
+    //find the sensor with the second highest value
+    for (int i = 0; i < n_sensor - 1; i++){
+
+        if (i != max){
+
+            if(values[i+1] > values[max2+1]){
+                max2 = i;
+            }
+        }
+    }
+
+    //calculate their positions
+    double x0 = max/2.0 - 1;
+    double x1 = max2/2.0 - 1;
+
+    //convert to linear function
+    double y0 = values[max+1];
+    double y1 = values[max2+1];
+    
+    //interpolate
+    double ratio = 1 - (y0 / (y0 + y1));
+
+    value = x0 + ((x1 - x0)*ratio);
+
+
+    return y1;
+}

@@ -36,5 +36,7 @@ class ScanLine{
     ScanLine(void);     //initialization function
 
     void scan(void);    //scan the whole line of sensors 
+
+    double array_to_value(void);    //convert the array to one directional value between -1 and 1
     
 };
