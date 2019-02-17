@@ -6,7 +6,7 @@ Sensor::Sensor(PinName p){
 }
 
 double Sensor::read_value(void){
-    raw = pin->read();               //read the raw contents of the object pointer
+    raw = pin->read();        //read the raw contents of the object pointer
     value = raw - noise;      //calculate the noise compensated value
     return value;             //return the noise compensated value
 }
@@ -18,6 +18,7 @@ ScanLine::ScanLine(){
 
     //populate the scan line array
     scan_line[0] = new Sensor(SENSOR_TAIL);
+
     scan_line[1] = new Sensor(SENSOR_0);
     scan_line[2] = new Sensor(SENSOR_1); 
     scan_line[3] = new Sensor(SENSOR_2);
@@ -30,6 +31,7 @@ ScanLine::ScanLine(){
     enable = new DigitalOut(SEN_EN);
     
     //put a 1 in the shift register and shift it one position
+    //this is done becouse the output clock is one position behind the shift register clock
     enable->write(0);
     data->write(1);
     wait(PROPAGTION_DELAY);
@@ -38,14 +40,14 @@ ScanLine::ScanLine(){
     clock->write(0);
     data->write(0);
     
-    n_sensor = 6;       //this is the number of sensors in the scanline
-    current_sensor = 0; //start at sensor 0
+    n_sensor = 6;                       //this is the number of sensors in the scanline
+    current_sensor = 0;                 //start at sensor 0
 }
 
 void ScanLine::next(){
 
     if(current_sensor < n_sensor){     //if not at the end of the scan line 
-        clock->write(1);                     //tick the clock
+        clock->write(1);               //tick the clock
         wait(PROPAGTION_DELAY);
         clock->write(0);
         wait(PROPAGTION_DELAY);
@@ -54,16 +56,16 @@ void ScanLine::next(){
     }
     else{                               //if at the end of the scanline
         for(int i = n_sensor; i < 7; i++){  
-            clock->write(1);                 //tick the clock the remaining number of times to get back to sensor 0
+            clock->write(1);            //tick the clock the remaining number of times to get back to sensor 0
             wait(PROPAGTION_DELAY);
             clock->write(0);
             wait(PROPAGTION_DELAY);
         }
 
-        data->write(1);              //pop another 1 into the shift register
+        data->write(1);                 //pop another 1 into the shift register
          wait(PROPAGTION_DELAY);
 
-        clock->write(1);
+        clock->write(1);                //tick the clock
         wait(PROPAGTION_DELAY);
         clock->write(0);
         wait(PROPAGTION_DELAY);

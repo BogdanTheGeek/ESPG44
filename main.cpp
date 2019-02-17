@@ -17,7 +17,7 @@ int main() {
 	while(1){
 	serial.printf("Scan!\n\r");
 	scanline->scan();
-	serial.printf("Sensors: %.2f %.2f %.2f %.2f %.2f \n\r", scanline->values[0],scanline->values[1],scanline->values[2],scanline->values[3],scanline->values[4]);
+	serial.printf("Sensors: %.2f %.2f %.2f %.2f %.2f \n\r", scanline->values[1],scanline->values[2],scanline->values[3],scanline->values[4],scanline->values[5]);
 	wait(2);
 	}
 }

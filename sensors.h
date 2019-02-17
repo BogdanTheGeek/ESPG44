@@ -2,7 +2,7 @@
 #include "mbed.h"
 #include "pins.h"
 
-#define PROPAGTION_DELAY 0.01
+#define PROPAGTION_DELAY 0.005
 
 //this class represents and individual sensor
 class Sensor{
