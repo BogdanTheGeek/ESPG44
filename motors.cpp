@@ -189,7 +189,7 @@ void Motor::turn(double degrees, double speed){
 
     while((busy_L == true) || (busy_R == true)){wait(0.001);}    //wait for previous commands to finish
     
-    long distance = (degrees/360.0)*(PI*WHEEL_AXEL_LENGTH);
+    long distance = (1.25*degrees/360.0)*(PI*WHEEL_AXEL_LENGTH);
 
     this->move_distance_R(-distance, speed);
     this->move_distance_L(distance, speed);
