@@ -102,8 +102,7 @@ double ScanLine::array_to_value(void){
 
     double value;
 
-    int max = 0; 
-    int max2 = 0;
+    int max = 0;
 
     //find the sensor with the highest value
     for (int i = 0; i < n_sensor - 1; i++){
@@ -112,30 +111,53 @@ double ScanLine::array_to_value(void){
             max = i;
         }
     }
-    //find the sensor with the second highest value
-    for (int i = 0; i < n_sensor - 1; i++){
+ 
+    if(max == 0){
 
-        if (i != max){
+        //calculate their positions
+        double x0 = max/2.0 - 1;
+        double x1 = (max+1)/2.0 - 1;
 
-            if(values[i+1] > values[max2+1]){
-                max2 = i;
-            }
-        }
+        //convert to linear function
+        double y0 = values[max+1];
+        double y1 = values[max+2];
+        
+        //interpolate
+        double ratio = 1 - (y0 / (y0 + y1));
+        value = x0 + ((x1 - x0)*ratio);
+
+    }else if(max == 4){
+
+        //calculate their positions
+        double x0 = max/2.0 - 1;
+        double x1 = (max-1)/2.0 - 1;
+
+        //convert to linear function
+        double y0 = values[max+1];
+        double y1 = values[max];
+        
+        //interpolate
+        double ratio = 1 - (y0 / (y0 + y1));
+        value = x0 + ((x1 - x0)*ratio);
+
+    }else{
+
+        //calculate their positions
+        //double x0 = (max-1)/2.0 - 1;
+        double x1 = max/2.0 - 1;
+        double x2 = (max+1)/2.0 - 1;
+
+        //convert to linear function
+        double y0 = values[max];
+        double y1 = values[max+1];
+        double y2 = values[max+2];
+        
+        //interpolate
+        double ratio = (y1 / (y1 + y0)) - (y1 / (y1 + y2));
+        value = x1 + ((x2 - x1)*ratio);
+
     }
 
-    //calculate their positions
-    double x0 = max/2.0 - 1;
-    double x1 = max2/2.0 - 1;
 
-    //convert to linear function
-    double y0 = values[max+1];
-    double y1 = values[max2+1];
-    
-    //interpolate
-    double ratio = 1 - (y0 / (y0 + y1));
-
-    value = x0 + ((x1 - x0)*ratio);
-
-
-    return y1;
+    return value;
 }
