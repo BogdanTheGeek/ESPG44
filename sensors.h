@@ -37,6 +37,7 @@ class ScanLine{
 
     void scan(void);    //scan the whole line of sensors 
 
-    double array_to_value(void);    //convert the array to one directional value between -1 and 1
+    double array_to_value_V1(void);    //convert the array to one directional value between -1 and 1 using interpolation
+    double array_to_value_V2(void);    //convert the array to one directional value between -1 and 1 using weighted average
     
 };
