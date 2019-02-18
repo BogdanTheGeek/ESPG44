@@ -9,14 +9,51 @@
 #include "motors.h"
 #include "demo1.h"
 
+InterruptIn button(PC_2);
+
+int state = 1;
+void increment_state() {
+	if(state > 2){
+		state = 1;
+	}
+	else{
+		state++;
+	}
+}
+
+
 
 void demo1(void)
 {
+	
     //create object
-    Motor *motors = new Motor() ;
+    Motor *motors = new Motor();
+	
+	button.rise(&increment_state);
     
     //wait for 6 seconds to prepare
     wait (3.0);
+	
+	
+	
+	while(1)switch (state){
+	case 1;  // pwm test
+	
+	
+	motors->move_constant_speed(0.1, 0.1);
+    wait(2.0);
+    motors->move_constant_speed(0.3, 0.3);	
+	wait(2.0);
+    motors->move_constant_speed(0.5, 0.5);	
+	wait(2.0);
+    motors->move_constant_speed(0.7, 0.7);	
+	wait(2.0);
+    motors->move_constant_speed(0.9,0.9 );	
+	break;
+	
+	
+	case 2:  // routine 
+	
     
     //start tracking the square routine
     
@@ -125,5 +162,9 @@ void demo1(void)
     //step 6   O==O ---------> 500mm,  ^stop!^
     motors->move_distance_R(500, 0.3);
     motors->move_distance_L(500, 0.3);  
-  
+	
+	break;
+	}
+}
+
 }
