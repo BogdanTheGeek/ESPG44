@@ -9,7 +9,7 @@
 #include "motors.h"
 #include "demo1.h"
 
-InterruptIn button(PC_2);
+InterruptIn button(PC_2, PullUp);
 
 int state = 1;
 void increment_state() {
@@ -23,8 +23,7 @@ void increment_state() {
 
 
 
-void demo1(void)
-{
+void demo1(void){
 	
     //create object
     Motor *motors = new Motor();
@@ -37,8 +36,8 @@ void demo1(void)
 	
 	
 	while(1)switch (state){
-	case 1;  // pwm test
-	
+
+	case 1:  // pwm test	
 	
 	motors->move_constant_speed(0.1, 0.1);
     wait(2.0);
@@ -53,8 +52,7 @@ void demo1(void)
 	
 	
 	case 2:  // routine 
-	
-    
+
     //start tracking the square routine
     
     //set 'travel distance' and 'wheel speed (Right and Left)' ,
@@ -165,6 +163,4 @@ void demo1(void)
 	
 	break;
 	}
-}
-
 }
