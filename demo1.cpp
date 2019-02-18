@@ -43,7 +43,7 @@ void demo1(void)
     motors->move_distance_R(500, 0.3);
     motors->move_distance_L(500, 0.3);  
     
-    //step 4    O==O ------>     //turning right for 90 degrees, with a speed of 0.3 (scale 0-1)
+    //step 4    O==O ------>     //turning right for 1 degrees, with a speed of 0.3 (scale 0-1)
     //                      |
     //                      |
     //                      |
@@ -75,7 +75,7 @@ void demo1(void)
     
     //******   anti-clockwise   ******
     //step 1   turning around at the origin
-    motors->turn(180.0, 0.3);    
+    motors->turn(90.0, 0.3);    
     
     //step 2   O==O ---------> 500mm,  ^stop!^
     motors->move_distance_R(500, 0.3);

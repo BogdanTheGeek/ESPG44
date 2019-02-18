@@ -3,8 +3,8 @@
 
 
 void Motor::speed_ISR(){
-    double speed_calc_optim = (60.0/PPR)/((double)CHECK_SPEED_INTERVAL);          //calculate speed in rpm
-    double distance_calc_optim = (1.0/PPR)*(PI*WHEEL_DIA);                        //calculate distance in mm
+    const double speed_calc_optim = (60.0/PPR)/((double)CHECK_SPEED_INTERVAL);          //calculate speed in rpm
+    const double distance_calc_optim = (1.0/PPR)*(PI*WHEEL_DIA);                        //calculate distance in mm
     
     speed_R = encoder_count_R * speed_calc_optim;
     speed_L = encoder_count_L * speed_calc_optim; 
@@ -102,8 +102,7 @@ void Motor::move_distance_R(long distance, double speed){
 
     
 
-    while(busy_R == true){serial->printf("busy R\n");wait(0.1);}    //wait for previous commands to finish
-    serial->printf("move_distance_R\n");
+    while(busy_R == true){wait(0.001);}    //wait for previous commands to finish
 
     long start_distance = distance_R;
     end_distance_R = start_distance + distance;
@@ -126,8 +125,7 @@ void Motor::move_distance_L(long distance, double speed){
 
     
 
-    while(busy_L == true){serial->printf("busy L\n");wait(0.1);}    //wait for previous commands to finish
-    serial->printf("move_distance_L\n");
+    while(busy_L == true){wait(0.001);}    //wait for previous commands to finish
 
     long start_distance = distance_L;
     end_distance_L = start_distance + distance;
@@ -148,12 +146,10 @@ void Motor::move_distance_L(long distance, double speed){
 
 void Motor::check_distance_R(){
 
-    serial->printf("check_distance_R \n");
-
     if(direction_R == true){
         if(distance_R < end_distance_R){
             busy_R = true;
-            check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);    
+            check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_DISTANCE_INTERVAL);    
         }else{
             busy_R = false;
             this->set_speed_R(0);  
@@ -161,7 +157,7 @@ void Motor::check_distance_R(){
     }else{
         if(distance_R > end_distance_R){
             busy_R = true;
-            check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_SPEED_INTERVAL);
+            check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_DISTANCE_INTERVAL);
         }else{
             busy_R = false;
             this->set_speed_R(0);
@@ -170,12 +166,10 @@ void Motor::check_distance_R(){
 }
 void Motor::check_distance_L(){
 
-    serial->printf("check_distance_L\n");
-
     if(direction_L == true){
         if(distance_L < end_distance_L){
             busy_L = true;
-            check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);
+            check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_DISTANCE_INTERVAL);
         }else{
             busy_L = false;
             this->set_speed_L(0);
@@ -183,7 +177,7 @@ void Motor::check_distance_L(){
     }else{
         if(distance_L > end_distance_L){
             busy_L = true;
-            check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_SPEED_INTERVAL);          
+            check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_DISTANCE_INTERVAL);          
         }else{
             busy_L = false;
             this->set_speed_L(0);
@@ -193,7 +187,7 @@ void Motor::check_distance_L(){
 
 void Motor::turn(double degrees, double speed){
 
-    while((busy_L == true) || (busy_R == true)){serial->printf("busy L and R\n");wait(0.1);}    //wait for previous commands to finish
+    while((busy_L == true) || (busy_R == true)){wait(0.001);}    //wait for previous commands to finish
     
     long distance = (degrees/360.0)*(PI*WHEEL_AXEL_LENGTH);
 
@@ -272,8 +266,9 @@ void Motor::encoder_fall_handler_LB(){
 
 Motor::Motor(void){
 
+#if defined(SERIAL_DEBUG)
     serial = new Serial(USBTX, USBRX, 9600);
-    
+#endif
     //create objects form the pointers and assign their pins from pin.h
 
     motor_R = new PwmOut(PWM_R);    

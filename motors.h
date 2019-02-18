@@ -6,26 +6,28 @@
 
 #define BB_COEF 0.01;   //bang bang coeddiciant
 
-#define SERIAL_DEBUG
+#define SERIAL_DEBUGx
 
 #define X1              //select encoder precision
 
 #ifdef X1
-#define PPR 64.0                   //this is the number of pulses per revolution in X1
+#define PPR 256.0                  //this is the number of pulses per revolution in X1
 #endif
 
 #ifdef X2
-#define PPR 128.0                   //this is the number of pulses per revolution in X2
+#define PPR 512.0                   //this is the number of pulses per revolution in X2
 #endif
 
 #ifdef X4
-#define PPR 256.0                   //this is the number of pulses per revolution in X4
+#define PPR 1024.0                   //this is the number of pulses per revolution in X4
 #endif
 
 #define WHEEL_DIA 80             //wheel diameter in mm
 #define WHEEL_AXEL_LENGTH 166    //distance between centers of the wheels in mm
 #define PI 3.14159265359            //this is pi
-#define CHECK_SPEED_INTERVAL 0.1    //this is the update interval for the speed measurement ISR
+#define CHECK_SPEED_INTERVAL 0.05    //this is the update interval for the speed measurement ISR
+#define CHECK_DISTANCE_INTERVAL 0.025    //this is the update interval for the speed measurement ISR
+
 
 class Motor{
 
