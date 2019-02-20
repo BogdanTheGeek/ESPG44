@@ -82,7 +82,7 @@ void demo1(void){
 
     for (int i = 0; i < 3; i++)
      {
-        motors->turn(90, 0.25);
+        motors->turn(90, 0.3);
 
         while(motors->busy()){
             wait(0.1);
@@ -103,7 +103,7 @@ void demo1(void){
 #endif
      } 
 
-    motors->turn(180, 0.3);
+    motors->turn(200, 0.3);
 
     while(motors->busy()){
         wait(0.1);
@@ -126,7 +126,7 @@ void demo1(void){
     
      for (int i = 0; i < 3; i++)
      {
-        motors->turn(-90, 0.25);
+        motors->turn(-90, 0.3);
 
     while(motors->busy()){
         wait(0.1);
@@ -144,8 +144,7 @@ void demo1(void){
         wait(ROUTINE_DELAYS);
 #endif
      } 
-
-   
+ 
     state = 0;
 
 	break;
