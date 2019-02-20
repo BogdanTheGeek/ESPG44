@@ -11,14 +11,16 @@
 
 InterruptIn button(PC_2, PullUp);
 
-int state = 1;
+int state = 0;
+
 void increment_state() {
-	if(state > 2){
-		state = 1;
+	if(state >= 2){
+		state = 0;
 	}
 	else{
 		state++;
 	}
+    wait(0.5);      //debounce
 }
 
 
@@ -31,11 +33,15 @@ void demo1(void){
 	button.rise(&increment_state);
     
     //wait for 6 seconds to prepare
-    wait (3.0);
-	
+    //wait (3.0);
 	
 	
 	while(1)switch (state){
+
+    case 0:
+        //pause
+        wait(0.1);
+    break;
 
 	case 1:  // pwm test	
 	
@@ -47,12 +53,17 @@ void demo1(void){
 	wait(2.0);
     motors->move_constant_speed(0.7, 0.7);	
 	wait(2.0);
-    motors->move_constant_speed(0.9,0.9 );	
+    motors->move_constant_speed(0.9,0.9 );
+    wait(2.0);
+    motors->move_constant_speed(0, 0);
+
+    state = 0;
+
 	break;
-	
 	
 	case 2:  // routine 
 
+    wait (4.0);
     //start tracking the square routine
     
     //set 'travel distance' and 'wheel speed (Right and Left)' ,
@@ -161,6 +172,8 @@ void demo1(void){
     motors->move_distance_R(500, 0.3);
     motors->move_distance_L(500, 0.3);  
 	
+    state = 0;
+
 	break;
 	}
 }
