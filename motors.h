@@ -4,7 +4,7 @@
 #include "pins.h"
 
 
-#define BB_COEF 0.01;   //bang bang coeddiciant
+#define BB_COEF 0.05;   //bang bang coeddiciant
 
 #define SERIAL_DEBUGx
 
