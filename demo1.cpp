@@ -69,31 +69,28 @@ void demo1(void){
 
     motors->move_distance_R(500, 0.3);
     motors->move_distance_L(500, 0.3);
-    wait(2);
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 4; i++)
      {
-        motors->turn(90, 0.2);
-        wait(2);
+        motors->turn(90, 0.3);
+
         motors->move_distance_R(500, 0.3);
         motors->move_distance_L(500, 0.3);
-        wait(2);
          
      } 
 
-    motors->turn(180, 0.2);
-    wait(2);
+    motors->turn(180, 0.3);
+
     motors->move_distance_R(500, 0.3);
     motors->move_distance_L(500, 0.3);
-    wait(2);
 
-     for (int i = 0; i < 5; i++)
+     for (int i = 0; i < 4; i++)
      {
-        motors->turn(-90, 0.2);
-        wait(2);
+        motors->turn(-90, 0.3);
+
         motors->move_distance_R(500, 0.3);
         motors->move_distance_L(500, 0.3);
-        wait(2);
+
      } 
 
    

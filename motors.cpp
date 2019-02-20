@@ -13,7 +13,7 @@ void Motor::speed_ISR(){
     distance_L += encoder_count_L * distance_calc_optim;
 
 #if defined(SERIAL_DEBUG)
-    serial->printf("Rs: %.2f Ls: %.2f Rd = %d Ld = %d BR:%d BL:%d \n", speed_R, speed_L, distance_R, distance_L, busy_R, busy_L);
+    serial->printf("Rs:%.2f Ls:%.2f Rd=%d Ld=%d\n\r", speed_R, speed_L, distance_R, distance_L);
 #endif
 
     encoder_count_R = 0;
@@ -33,7 +33,7 @@ void Motor::update_speed_BB(){
 
     static double pwm_R, pwm_L;
 
-    if(target_speed_R == 0){\
+    if(target_speed_R == 0){
 
         this->set_speed_R(0);
         pwm_R = 0;
@@ -73,8 +73,6 @@ void Motor::update_speed_BB(){
 }
 void Motor::set_speed_R(double speed){
 
-    //motor_EN->write(0);
-
     if(speed >= 0){        //set the direction of the motors depending on the sign of the speed
         dir_R->write(1);
    		motor_R->write(1.0 - speed);
@@ -83,13 +81,8 @@ void Motor::set_speed_R(double speed){
         dir_R->write(0);
     	motor_R->write(1.0 + speed);
     }
-
-    motor_EN->write(1);
-
 }
 void Motor::set_speed_L(double speed){
-
-    //motor_EN->write(0);
 
     if(speed >= 0){        //set the direction of the motors depending on the sign of the speed
         dir_L->write(1);
@@ -99,9 +92,6 @@ void Motor::set_speed_L(double speed){
         dir_L->write(0);
     	motor_L->write(1.0 + speed);
     }
-
-    motor_EN->write(1);
-
 }
 
 void Motor::move_constant_speed(double new_speed_L, double new_speed_R){        //move with no encoder feedback, arguments 0-1.0 sign gives direction
@@ -217,7 +207,7 @@ void Motor::turn(double degrees, double speed){
 
     while((busy_L == true) || (busy_R == true)){wait(0.001);}    //wait for previous commands to finish
     
-    long distance = (1.25*degrees/360.0)*(PI*WHEEL_AXEL_LENGTH);
+    long distance = (degrees/360.0)*(PI*WHEEL_AXEL_LENGTH);
 
     this->move_distance_R(-distance, speed);
     this->move_distance_L(distance, speed);
@@ -301,16 +291,19 @@ Motor::Motor(void){
 
     motor_R = new PwmOut(PWM_R);    
     motor_L = new PwmOut(PWM_L);
+    dir_R = new DigitalOut(DIR_R);
+    dir_L = new DigitalOut(DIR_L);
+    motor_EN = new DigitalOut(MOTOR_EN);
 
     motor_R->period(0.020);      //set the periods of the PWM signal
     motor_L->period(0.020);
 
     motor_R->write(1.0);     
     motor_L->write(1.0);
-    
-    motor_EN = new DigitalOut(MOTOR_EN);
-    dir_R = new DigitalOut(DIR_R);
-    dir_L = new DigitalOut(DIR_L);
+
+    wait(0.5);      //used to avoid jerking when started
+
+    motor_EN->write(1);
 
     //make the initial values of the distance 0
     distance_R = 0;
