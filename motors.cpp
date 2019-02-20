@@ -13,7 +13,7 @@ void Motor::speed_ISR(){
     distance_L += encoder_count_L * distance_calc_optim;
 
 #if defined(SERIAL_DEBUG)
-    serial->printf("Rs:%.2f Ls:%.2f Rd=%d Ld=%d\n\r", speed_R, speed_L, distance_R, distance_L);
+    serial->printf("Rs:%.2f Ls:%.2f Rd=%d Ld=%d %d %d %d\n\r", speed_R, speed_L, distance_R, distance_L, busy_L, busy_R, turning);
 #endif
 
     encoder_count_R = 0;
@@ -109,10 +109,6 @@ void Motor::set_target_speed(double new_target_speed_L, double new_target_speed_
 
 void Motor::move_distance_R(long distance, double speed){
 
-    
-
-    while(busy_R == true){wait(0.001);}    //wait for previous commands to finish
-
     long start_distance = distance_R;
     end_distance_R = start_distance + distance;
 
@@ -133,10 +129,6 @@ void Motor::move_distance_R(long distance, double speed){
 }
 
 void Motor::move_distance_L(long distance, double speed){
-
-    
-
-    while(busy_L == true){wait(0.001);}    //wait for previous commands to finish
 
     long start_distance = distance_L;
     end_distance_L = start_distance + distance;
@@ -166,7 +158,6 @@ void Motor::check_distance_R(){
             check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_DISTANCE_INTERVAL);    
         }else{
             busy_R = false;
-            //this->set_speed_R(0); 
             target_speed_R = 0; 
         }
     }else{
@@ -175,7 +166,6 @@ void Motor::check_distance_R(){
             check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_DISTANCE_INTERVAL);
         }else{
             busy_R = false;
-            //this->set_speed_R(0);
             target_speed_R = 0;
         }
     }
@@ -188,8 +178,8 @@ void Motor::check_distance_L(){
             check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_DISTANCE_INTERVAL);
         }else{
             busy_L = false;
-            this->set_speed_L(0);
             target_speed_L = 0;
+            this->set_speed_L(0);
         }
     }else{
         if(distance_L > end_distance_L){
@@ -197,23 +187,35 @@ void Motor::check_distance_L(){
             check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_DISTANCE_INTERVAL);          
         }else{
             busy_L = false;
-            this->set_speed_L(0);
             target_speed_L = 0;
+            this->set_speed_L(0);
         }
     }
 }
 
 void Motor::turn(double degrees, double speed){
 
-    while((busy_L == true) || (busy_R == true)){wait(0.001);}    //wait for previous commands to finish
-    
-    long distance = (degrees/360.0)*(PI*WHEEL_AXEL_LENGTH);
+   long distance = (degrees/360.0)*(PI*WHEEL_AXEL_LENGTH) - 20;
+
+    turning = true;
 
     this->move_distance_R(-distance, speed);
-    this->move_distance_L(distance, speed);
+    this->move_distance_L(distance, speed);    
     
 }
 
+bool Motor::busy(void){
+    if((busy_L == true) || (busy_R == true) || (turning == true) || (speed_L != 0) || (speed_R != 0)){
+
+        if((busy_L == false) && (busy_R == false) && (turning == true)){
+            turning = false;
+        }
+        return true;
+    }
+    else{
+        return false;
+    }
+}
 
 // this is the encoder logic
 void Motor::encoder_rise_handler_RA(){
@@ -310,7 +312,8 @@ Motor::Motor(void){
     distance_L = 0;
 
 	busy_R = false;
-	busy_L = false;	
+	busy_L = false;
+    turning = false;	
 
     target_speed_R = 0;
     target_speed_L = 0;
@@ -340,13 +343,13 @@ Motor::Motor(void){
 #endif
     
 #if defined(SERIAL_DEBUG)
-    serial->printf("Motors and encoders initialised!\n");
+    serial->printf("Motors and encoders initialised!\n\r");
 #endif
     //start the speed measuring ISR
     check_speed.attach(callback(this, &Motor::speed_ISR), CHECK_SPEED_INTERVAL);
 
 #if defined(SERIAL_DEBUG)
-    serial->printf("check_speed attached!\n");
+    serial->printf("check_speed attached!\n\r");
 #endif
 
 }

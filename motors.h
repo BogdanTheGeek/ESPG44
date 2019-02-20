@@ -23,7 +23,7 @@
 #endif
 
 #define WHEEL_DIA 80             //wheel diameter in mm
-#define WHEEL_AXEL_LENGTH 166    //distance between centers of the wheels in mm
+#define WHEEL_AXEL_LENGTH 140    //distance between centers of the wheels in mm
 #define PI 3.14159265359            //this is pi
 #define CHECK_SPEED_INTERVAL 0.04    //this is the update interval for the speed measurement ISR
 #define CHECK_DISTANCE_INTERVAL 0.02    //this is the update interval for the speed measurement ISR
@@ -56,7 +56,7 @@ class Motor{
     
 
     //indicates that a command is already running
-    bool busy_L, busy_R;
+    bool busy_L, busy_R, turning;
 
     public:  
 
@@ -67,12 +67,16 @@ class Motor{
     Motor(void);            //initialisation function
     
     void speed_ISR();      //speed calculation ISR
+    
     void set_speed_R(double speed);
     void set_speed_L(double speed);
+    
     void update_speed_PID();    //PID
     void update_speed_BB();     //bang bang
+    
     void set_target_speed(double new_target_speed_L, double new_target_speed_R);    //set the target speed for the PID
     void move_constant_speed(double new_speed_L, double new_speed_R);     //move with no encoder feedback, arguments 0-1.0 sign gives direction
+    
     void move_distance_R(long distance, double speed);            //move the right wheel a certain distance
     void move_distance_L(long distance, double speed);            //move the left wheel a certain distance
     void check_distance_R();
@@ -80,7 +84,8 @@ class Motor{
 
     void turn(double degrees, double speed);                        //turn the buggy a number of degrees (positive is right, negative is left)
 
-
+    bool busy(void);
+    
     //interrupt handlers for up to X4 encoder readout
 
     void encoder_rise_handler_RA();
