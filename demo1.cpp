@@ -103,7 +103,7 @@ void demo1(void){
 #endif
      } 
 
-    motors->turn(200, 0.3);
+    motors->turn(190, 0.3);
 
     while(motors->busy()){
         wait(0.1);

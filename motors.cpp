@@ -198,9 +198,9 @@ void Motor::turn(double degrees, double speed){
     long distance = (degrees/360.0)*(PI*WHEEL_AXEL_LENGTH);
 
     if (degrees >= 0){
-        distance = distance - 20;
+        distance = distance - 10;
     }else{
-        distance = distance + 20;
+        distance = distance + 10;
     }
 
     turning = true;
