@@ -43,22 +43,49 @@ void demo1(void){
         wait(0.1);
     break;
 
-	case 1:  // pwm test	
-	motors->set_target_speed(9000, 9000);        //stops BB
+	case 1:{  // pwm test	
 
-	motors->move_constant_speed(0.1, 0.1);
-    wait(2.0);
-    motors->move_constant_speed(0.3, 0.3);	
-	wait(2.0);
-    motors->move_constant_speed(0.5, 0.5);	
-	wait(2.0);
-    motors->move_constant_speed(0.7, 0.7);	
-	wait(2.0);
-    motors->move_constant_speed(0.9,0.9 );
-    wait(2.0);
-    motors->move_constant_speed(0, 0);
+        Serial serial(USBTX, USBRX, 9600);
+        serial.printf("Serial initialised!\n\r");
 
-    state = 0;
+    	motors->set_target_speed(9000, 9000);        //stops BB
+
+    	motors->move_constant_speed(0.1, 0.1);
+        for (int i = 0; i < 10; i++)
+        {
+            serial.printf("SpeedL: %.2f SpeedR: %.2f\n\r", motors->return_speed_L(), motors->return_speed_R());
+            wait(0.2);
+        }
+        motors->move_constant_speed(0.3, 0.3);	
+    	 for (int i = 0; i < 10; i++)
+        {
+            serial.printf("SpeedL: %.2f SpeedR: %.2f\n\r", motors->return_speed_L(), motors->return_speed_R());
+            wait(0.2);
+        }
+        motors->move_constant_speed(0.5, 0.5);	
+    	 for (int i = 0; i < 10; i++)
+        {
+            serial.printf("SpeedL: %.2f SpeedR: %.2f\n\r", motors->return_speed_L(), motors->return_speed_R());
+            wait(0.2);
+        }
+        motors->move_constant_speed(0.7, 0.7);	
+    	 for (int i = 0; i < 10; i++)
+        {
+            serial.printf("SpeedL: %.2f SpeedR: %.2f\n\r", motors->return_speed_L(), motors->return_speed_R());
+            wait(0.2);
+        }
+        motors->move_constant_speed(0.9,0.9 );
+         for (int i = 0; i < 10; i++)
+        {
+            serial.printf("SpeedL: %.2f SpeedR: %.2f\n\r", motors->return_speed_L(), motors->return_speed_R());
+            wait(0.2);
+        }
+        motors->move_constant_speed(0, 0);
+
+        state = 0;
+
+        delete serial;
+    }
 
 	break;
 	
@@ -90,7 +117,7 @@ void demo1(void){
         }
     }
 
-    motors->turn(190, 0.3);
+    motors->turn(180, 0.3);
 
     while(motors->busy()){
         wait(0.1);

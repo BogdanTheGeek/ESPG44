@@ -135,15 +135,13 @@ void Motor::move_distance_L(long distance, double speed){
     if(distance > 0){
         direction_L = true;
         //this->set_speed_L(speed);
-        end_distance_L -= 20;
-        target_speed_L = speed * 300;
+        target_speed_L = speed * 500;
 
     }
     else {
         direction_L = false;
         //this->set_speed_L(-speed);
-        end_distance_L += 20;
-        target_speed_L = -speed * 300;
+        target_speed_L = -speed * 500;
     }
 
     
@@ -199,9 +197,9 @@ void Motor::turn(double degrees, double speed){
     long distance = (degrees/360.0)*(PI*WHEEL_AXEL_LENGTH);
 
     if (degrees >= 0){
-        distance = distance - 10;
+        distance = distance - 20;
     }else{
-        distance = distance + 10;
+        distance = distance + 20;
     }
 
     turning = true;
@@ -222,6 +220,14 @@ bool Motor::busy(void){
     else{
         return false;
     }
+}
+
+double Motor::return_speed_R(void){
+    return speed_R;
+}
+
+double Motor::return_speed_L(void){
+    return speed_L;
 }
 
 // this is the encoder logic
