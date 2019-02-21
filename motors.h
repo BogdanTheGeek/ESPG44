@@ -4,11 +4,11 @@
 #include "pins.h"
 
 
-#define BB_COEF 0.05;   //bang bang coeddiciant
+#define BB_COEF 0.01;   //bang bang coeddiciant
 
 #define SERIAL_DEBUGx
 
-#define X1              //select encoder precision
+#define X4              //select encoder precision
 
 #ifdef X1
 #define PPR 256.0                  //this is the number of pulses per revolution in X1
@@ -27,6 +27,8 @@
 #define PI 3.14159265359            //this is pi
 #define CHECK_SPEED_INTERVAL 0.05    //this is the update interval for the speed measurement ISR
 #define CHECK_DISTANCE_INTERVAL 0.025    //this is the update interval for the speed measurement ISR
+
+
 
 
 class Motor{
@@ -48,6 +50,9 @@ class Motor{
 
     //store the encoder counts and directions for encoders 
     int encoder_count_R, encoder_count_L;
+    //** another encoder counters by yue
+    int m_count_R, m_count_L ;
+    
     
     //store the current speeds and the target speeds
     double speed_L, speed_R, target_speed_L, target_speed_R;
@@ -56,7 +61,10 @@ class Motor{
     
 
     //indicates that a command is already running
-    bool busy_L, busy_R;
+    bool busy_both ;
+    
+    //ticker that check busy or not
+    Ticker ticker_busy;
 
     public:  
 
@@ -65,7 +73,7 @@ class Motor{
     Serial *serial;
     
     Motor(void);            //initialisation function
-    
+    void busy_or_not();    // new added function
     void speed_ISR();      //speed calculation ISR
     void set_speed_R(double speed);
     void set_speed_L(double speed);
@@ -80,6 +88,13 @@ class Motor{
 
     void turn(double degrees, double speed);                        //turn the buggy a number of degrees (positive is right, negative is left)
 
+   // void busy_or_not();    // new added function
+    
+    void turnLeftDeg (double degree, double speed);
+    
+    void turnRightDeg (double degree, double speed);
+    
+    void distance (double distance, double speed);
 
     //interrupt handlers for up to X4 encoder readout
 
