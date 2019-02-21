@@ -41,7 +41,6 @@ void Motor::update_speed_BB(){
     }else if(target_speed_R == 9000){
         target_speed_R = 9000;
     }else{
-
         if (speed_R < target_speed_R){
             pwm_R += BB_COEF;
             this->set_speed_R(pwm_R);
@@ -56,10 +55,10 @@ void Motor::update_speed_BB(){
 
         this->set_speed_L(0);
         pwm_L = 0;
+
     }else if(target_speed_L == 9000){
         target_speed_L = 9000;
     }else{
-
         if (speed_L < target_speed_L){
             pwm_L += BB_COEF;
             this->set_speed_L(pwm_L);
@@ -136,12 +135,14 @@ void Motor::move_distance_L(long distance, double speed){
     if(distance > 0){
         direction_L = true;
         //this->set_speed_L(speed);
+        end_distance_L -= 20;
         target_speed_L = speed * 300;
 
     }
     else {
         direction_L = false;
         //this->set_speed_L(-speed);
+        end_distance_L += 20;
         target_speed_L = -speed * 300;
     }
 

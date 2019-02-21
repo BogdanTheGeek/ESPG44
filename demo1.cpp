@@ -9,8 +9,6 @@
 #include "motors.h"
 #include "demo1.h"
 
-#define ROUTINE_DELAYSx 2
-
 InterruptIn button(PC_2, PullUp);
 
 int state = 0;
@@ -69,39 +67,28 @@ void demo1(void){
     wait (4.0);
     //start tracking the square routine
 
-    motors->move_distance_R(500, 0.3);
-    motors->move_distance_L(500, 0.3);
+    motors->move_distance_R(480, 0.3);
+    motors->move_distance_L(480, 0.3);
 
     while(motors->busy()){
         wait(0.1);
     }
-    
-#if defined(ROUTINE_DELAYS)
-    wait(ROUTINE_DELAYS);
-#endif
 
-    for (int i = 0; i < 3; i++)
-     {
+    for (int i = 0; i < 3; i++){
+
         motors->turn(90, 0.3);
 
         while(motors->busy()){
             wait(0.1);
         }
 
-#if defined(ROUTINE_DELAYS)
-        wait(ROUTINE_DELAYS);
-#endif
-        motors->move_distance_R(500, 0.3);
-        motors->move_distance_L(500, 0.3);
+        motors->move_distance_R(480, 0.3);
+        motors->move_distance_L(480, 0.3);
 
         while(motors->busy()){
             wait(0.1);
         }
-
-#if defined(ROUTINE_DELAYS)
-        wait(ROUTINE_DELAYS);
-#endif
-     } 
+    }
 
     motors->turn(190, 0.3);
 
@@ -109,44 +96,32 @@ void demo1(void){
         wait(0.1);
     }
 
-#if defined(ROUTINE_DELAYS)
-    wait(ROUTINE_DELAYS);
-#endif
-
-    motors->move_distance_R(500, 0.3);
-    motors->move_distance_L(500, 0.3);
+    motors->move_distance_R(480, 0.3);
+    motors->move_distance_L(480, 0.3);
     
     while(motors->busy()){
         wait(0.1);
     }
 
-    #if defined(ROUTINE_DELAYS)
-    wait(ROUTINE_DELAYS);
-#endif
-    
-     for (int i = 0; i < 3; i++)
-     {
+
+    for (int i = 0; i < 3; i++){
+
         motors->turn(-90, 0.3);
 
-    while(motors->busy()){
-        wait(0.1);
-    }
-#if defined(ROUTINE_DELAYS)
-        wait(ROUTINE_DELAYS);
-#endif
-        motors->move_distance_R(500, 0.3);
-        motors->move_distance_L(500, 0.3);
+        while(motors->busy()){
+            wait(0.1);
+        }
+        motors->move_distance_R(480, 0.3);
+        motors->move_distance_L(480, 0.3);
         
         while(motors->busy()){
             wait(0.1);
         }
-#if defined(ROUTINE_DELAYS)
-        wait(ROUTINE_DELAYS);
-#endif
-     } 
+    } 
  
     state = 0;
 
 	break;
-	}
+    }
+	
 }

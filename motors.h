@@ -25,8 +25,8 @@
 #define WHEEL_DIA 80                    //wheel diameter in mm
 #define WHEEL_AXEL_LENGTH 140           //distance between centers of the wheels in mm
 #define PI 3.14159265359                //this is pi
-#define CHECK_SPEED_INTERVAL 0.05       //this is the update interval for the speed measurement ISR
-#define CHECK_DISTANCE_INTERVAL 0.025   //this is the update interval for the speed measurement ISR
+#define CHECK_SPEED_INTERVAL 0.04       //this is the update interval for the speed measurement ISR
+#define CHECK_DISTANCE_INTERVAL 0.02   //this is the update interval for the speed measurement ISR
 
 
 class Motor{
