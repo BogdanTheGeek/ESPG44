@@ -158,6 +158,7 @@ void Motor::check_distance_R(){
         }else{
             busy_R = false;
             target_speed_R = 0; 
+			if(turning==false)target_speed_L = 0;
         }
     }else{
         if(distance_R > end_distance_R){
@@ -166,6 +167,7 @@ void Motor::check_distance_R(){
         }else{
             busy_R = false;
             target_speed_R = 0;
+			if(turning==false)target_speed_L = 0;
         }
     }
 }
@@ -179,6 +181,7 @@ void Motor::check_distance_L(){
             busy_L = false;
             target_speed_L = 0;
             this->set_speed_L(0);
+			if(turning==false)target_speed_R = 0;
         }
     }else{
         if(distance_L > end_distance_L){
@@ -188,6 +191,7 @@ void Motor::check_distance_L(){
             busy_L = false;
             target_speed_L = 0;
             this->set_speed_L(0);
+			if(turning==false)target_speed_R = 0;
         }
     }
 }
