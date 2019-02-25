@@ -1,9 +1,7 @@
-
-#include "demo1.h"
+#include "motors.h"
 
 int main() {
 
-	demo1();
 
 	
 }
