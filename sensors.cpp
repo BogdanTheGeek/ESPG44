@@ -170,3 +170,20 @@ double ScanLine::array_to_value_V2(void){
 
     return value;
 }
+
+bool ScanLine::on_line(void){
+
+    double sum = 0;
+
+    for(int i = 1; i < n_sensor; i++){
+        sum += values[i];
+    }
+
+    double average = sum / n_sensor;
+
+    if (average < LINE_THRESHOLD){
+        return false;
+    }else{
+        return true;
+    }
+}
