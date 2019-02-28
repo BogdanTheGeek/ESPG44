@@ -1,7 +1,7 @@
 #include "pid.h"
-#include "motors.h"
+//#include "motors.h"
 #include "mbed.h"
-#include "sensors.h"
+//#include "sensors.h"
 
 enum working_state {
 	Stop,
