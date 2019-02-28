@@ -1,6 +1,7 @@
 #include "mbed.h"
 #include "motors.h"
 #include "sensors.h"
+
 #define base_speed_r  0.2
 #define base_speed_l  0.2
 //pid basic variables
@@ -23,13 +24,7 @@ private:
   
 public:
       
-  enum working_state 
-      {
-        Follow,
-        Stop,
-        Turning
-      }
-  enum working_state WORKING_STATE = Stop;
+   
 
   //constructor
   void pid (void);
