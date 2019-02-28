@@ -51,7 +51,9 @@ int main(void)
 			{
 				pp_motors->set_speed_R(0);
 				pp_motors->set_speed_L(0);
-
+				while (pp_motors->busy_or_not() == true)
+				{
+				}
 				WORKING_STATE = Turning;
 			}
 			//#2   else stay in Follow mode

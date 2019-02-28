@@ -27,7 +27,7 @@ public:
    
 
   //constructor
-  void pid (void);
+  pid (void);
 
   //pid output 
   void pid_calculation(void);
