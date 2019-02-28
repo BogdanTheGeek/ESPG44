@@ -15,14 +15,15 @@ int main(void)
 	case pp_pid->Stop:
 		pp_motors->set_speed_R(0);
 		pp_motors->set_speed_L(0);
-		//if bluetooth signal = 1, change to Follow mode --- else stay in Stop mode
-		if ()
-		{
-			pp_pid->WORKING_STATE = pp_pid->Follow;
-		}
-		else
-		{
-		}
+		while (pp_motors->busy_or_not()== true) {}
+			//if bluetooth signal = 1, change to Follow mode --- else stay in Stop mode
+			if ()
+			{
+				pp_pid->WORKING_STATE = pp_pid->Follow;
+			}
+			else
+			{
+			}
 
 		//******Follow mode
 	case pp_pid->Follow:
@@ -56,7 +57,9 @@ int main(void)
 		//******Turning mode
 	case pp_pid->Turning:
 		pp_motors->turn(180, 0.2);
-
+		while (pp_motors->busy_or_not() == true) {}
+		
+		
 		pp_pid->WORKING_STATE = pp_pid->Follow;
 
 		//check bluetooth signal to stop or not

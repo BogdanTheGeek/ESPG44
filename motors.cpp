@@ -23,6 +23,11 @@ void Motor::speed_ISR(){
     
 }
 
+bool Motor::busy_or_not() {
+    if (speed_R==0 && speed_L==0){return false;}
+    else {return true;}
+}
+
 
 void Motor::update_speed_PID(){
     

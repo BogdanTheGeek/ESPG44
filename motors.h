@@ -85,7 +85,9 @@ class Motor{
     long distance_L, distance_R;  
     
     Motor(void);            //initialisation function
-    
+
+    bool busy_or_not(void);  // new added function, return busy or not 1/0
+
     void set_speed_R(double speed);
     void set_speed_L(double speed);
     
