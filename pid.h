@@ -12,26 +12,21 @@
 #define KD 10
 #define KI 10
 
-class pid {
+class PID{
 private:
-
   
-//class pointers
-  ScanLine *p_ScanLine;
-  Motor  *p_Motor  ;
-//ticker objects
-  Ticker Ticker_pid;
+	//class pointers
+	ScanLine *sensors;
+	Motor *motors;
+	//ticker objects
+	//Ticker Ticker_PID;
   
 public:
-      
-   
 
-  //constructor
-  pid (void);
+	//constructor
+	PID(ScanLine *sensors_ptr, Motor *motors_ptr);
 
-  //pid output 
-  void pid_calculation(void);
-  void keep_calculate_PID(void);
-  
+	//pid output 
+	void PID_update(void);  
   
 };
