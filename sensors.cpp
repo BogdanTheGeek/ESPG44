@@ -173,15 +173,21 @@ double ScanLine::array_to_value_V2(void){
 
 bool ScanLine::on_line(void){
 
-    double sum = 0;
+    //find the highest and lowest values in the scanline
+    double max = 0;
+    double min = 1;
 
-    for(int i = 1; i < n_sensor; i++){
-        sum += values[i];
+    for (int i = 1; i < n_sensor; i++){
+
+        if(values[i] > max){
+            max = values[i];
+        }
+        if(values[i] < min){
+            min = values[i];
+        }
     }
 
-    double average = sum / n_sensor;
-
-    if (average < LINE_THRESHOLD){
+    if ((max-min) < LINE_THRESHOLD){
         return false;
     }else{
         return true;
