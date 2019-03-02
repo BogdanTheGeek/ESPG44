@@ -31,15 +31,25 @@ int main(void)
 
 		//******Follow mode
 	case Follow:
+		if(sensors->on_line() == true){
+			sensors->scan();
 
-		sensors->scan();
+			double speed_diff;
+			speed_diff = deflection_to_speed_diff(sensors->array_to_value_V2());
 
-		double speed_diff;
-		speed_diff = deflection_to_speed_diff(sensors->array_to_value_V2());
+			motors->target_speed_R -= speed_diff;
+			motors->target_speed_L += speed_diff; 
+		}else{
+			//check if it is a gap or the end of the line
+			wait(0.2);
+			if(sensors->on_line() == false){
+				WORKING_STATE = Turning;
+				break;
+			}
+			//optional rear sensor check
+			//
+		}
 
-		motors->target_speed_R -= speed_diff;
-		motors->target_speed_L += speed_diff; 
-		
 		break;
 
 		//******Turning mode
