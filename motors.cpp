@@ -18,63 +18,57 @@ void Motor::speed_ISR(){
 
     encoder_count_R = 0;
     encoder_count_L = 0;
-
-    this->update_speed_BB();
     
+    this->update_speed_PID();
 }
-
-bool Motor::busy_or_not() {
-    if (speed_R==0 && speed_L==0){return false;}
-    else {return true;}
-}
-
 
 void Motor::update_speed_PID(){
     
-    //this is for PID
-}
+    static double pwm_L, pwm_R;
 
-void Motor::update_speed_BB(){
+    //initialise target value of sensors
+    static double last_error_L, last_error_R;
+    static double I_value_L, I_value_R;
+    //error term
+    double error_L = target_speed_L - speed_L;
+    double error_R = target_speed_R - speed_R;
 
-    static double pwm_R, pwm_L;
 
-    if(target_speed_R == 0){
+    //Integral term
+    I_value_L += error_L * CHECK_SPEED_INTERVAL;
+    I_value_R += error_R * CHECK_SPEED_INTERVAL;
 
-        this->set_speed_R(0);
-        pwm_R = 0;
+    //final pid output
+    double PID_out_L = KP * error_L + KD * (error_L - last_error_L)/CHECK_SPEED_INTERVAL + KI * I_value_L;
+    double PID_out_R = KP * error_R + KD * (error_R - last_error_R)/CHECK_SPEED_INTERVAL + KI * I_value_R;
 
-    }else if(target_speed_R == 9000){
-        target_speed_R = 9000;
-    }else{
-        if (speed_R < target_speed_R){
-            pwm_R += BB_COEF;
-            this->set_speed_R(pwm_R);
-        }
-        else if(speed_R > target_speed_R){
-            pwm_R -= BB_COEF;
-            this->set_speed_R(pwm_R);
-        }
+    //add limitation of range
+    if (PID_out_L > MAX){
+    PID_out_L = MAX;
+    }
+    else if(PID_out_L < MIN){
+    PID_out_L = MIN;
+    }
+    if (PID_out_R > MAX){
+    PID_out_R = MAX;
+    }
+    else if(PID_out_R < MIN){
+    PID_out_R = MIN;
     }
 
-    if(target_speed_L == 0){
+    //store error for next time use
+    last_error_L = error_L;
+    last_error_R = error_R;
 
-        this->set_speed_L(0);
-        pwm_L = 0;
+    pwm_L += PID_out_L;
+    pwm_R += PID_out_R;
 
-    }else if(target_speed_L == 9000){
-        target_speed_L = 9000;
-    }else{
-        if (speed_L < target_speed_L){
-            pwm_L += BB_COEF;
-            this->set_speed_L(pwm_L);
-        }
-        else if(speed_L > target_speed_L){
-            pwm_L -= BB_COEF;
-            this->set_speed_L(pwm_L);
-        }
-    }
 
+    this->set_speed_L(pwm_L);
+    this->set_speed_R(pwm_R);
 }
+
+
 void Motor::set_speed_R(double speed){
 
     if(speed >= 0){        //set the direction of the motors depending on the sign of the speed
@@ -98,18 +92,6 @@ void Motor::set_speed_L(double speed){
     }
 }
 
-void Motor::move_constant_speed(double new_speed_L, double new_speed_R){        //move with no encoder feedback, arguments 0-1.0 sign gives direction
-    this->set_speed_R(new_speed_R);
-    this->set_speed_L(new_speed_L);
-}
-
-
-void Motor::set_target_speed(double new_target_speed_L, double new_target_speed_R){
-   
-   target_speed_R = new_target_speed_R;
-   target_speed_L = new_target_speed_L;
-   
-}
 
 void Motor::move_distance_R(long distance, double speed){
 
@@ -118,13 +100,11 @@ void Motor::move_distance_R(long distance, double speed){
 
     if(distance > 0){
         direction_R = true;
-        //this->set_speed_R(speed);
-        target_speed_R = speed * 300;
+        this->set_speed_R(speed);
     }
     else {
         direction_R = false;
-        //this->set_speed_R(-speed);
-        target_speed_R = -speed * 300;
+        this->set_speed_R(-speed);
     }
 
     
@@ -139,14 +119,12 @@ void Motor::move_distance_L(long distance, double speed){
 
     if(distance > 0){
         direction_L = true;
-        //this->set_speed_L(speed);
-        target_speed_L = speed * 500;
+        this->set_speed_L(speed);
 
     }
     else {
         direction_L = false;
-        //this->set_speed_L(-speed);
-        target_speed_L = -speed * 500;
+        this->set_speed_L(-speed);
     }
 
     
@@ -162,8 +140,7 @@ void Motor::check_distance_R(){
             check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_DISTANCE_INTERVAL);    
         }else{
             busy_R = false;
-            target_speed_R = 0; 
-			if(turning==false)target_speed_L = 0;
+            this->set_speed_R(0);
         }
     }else{
         if(distance_R > end_distance_R){
@@ -171,8 +148,7 @@ void Motor::check_distance_R(){
             check_reached_distance_R.attach(callback(this, &Motor::check_distance_R), CHECK_DISTANCE_INTERVAL);
         }else{
             busy_R = false;
-            target_speed_R = 0;
-			if(turning==false)target_speed_L = 0;
+            this->set_speed_R(0);
         }
     }
 }
@@ -184,9 +160,7 @@ void Motor::check_distance_L(){
             check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_DISTANCE_INTERVAL);
         }else{
             busy_L = false;
-            target_speed_L = 0;
             this->set_speed_L(0);
-			if(turning==false)target_speed_R = 0;
         }
     }else{
         if(distance_L > end_distance_L){
@@ -194,9 +168,7 @@ void Motor::check_distance_L(){
             check_reached_distance_L.attach(callback(this, &Motor::check_distance_L), CHECK_DISTANCE_INTERVAL);          
         }else{
             busy_L = false;
-            target_speed_L = 0;
             this->set_speed_L(0);
-			if(turning==false)target_speed_R = 0;
         }
     }
 }
@@ -337,9 +309,6 @@ Motor::Motor(void){
 	busy_L = false;
     turning = false;	
 
-    target_speed_R = 0;
-    target_speed_L = 0;
-    
     encoder_RA = new InterruptIn(ENCODER_RA);
     encoder_RB = new InterruptIn(ENCODER_RB);
     encoder_LA = new InterruptIn(ENCODER_LA);

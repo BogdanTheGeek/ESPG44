@@ -1,4 +1,4 @@
-main.o: ../main.cpp ../mbed_config.h ../pid.h ../mbed/mbed.h \
+main.o: ../main.cpp ../mbed_config.h ../motors.h ../mbed/mbed.h \
  ../mbed/platform/mbed_version.h ../mbed/platform/mbed_toolchain.h \
  ../mbed/platform/mbed_preprocessor.h ../mbed/platform/platform.h \
  ../mbed/platform/mbed_retarget.h ../mbed/platform/mbed_toolchain.h \
@@ -136,4 +136,4 @@ main.o: ../main.cpp ../mbed_config.h ../pid.h ../mbed/mbed.h \
  ../mbed/platform/CriticalSectionLock.h ../mbed/platform/DeepSleepLock.h \
  ../mbed/platform/mbed_stats.h ../mbed/platform/Callback.h \
  ../mbed/platform/FunctionPointer.h ../mbed/platform/ScopedLock.h \
- ../motors.h ../pins.h ../sensors.h
+ ../pins.h ../sensors.h

@@ -49,7 +49,6 @@ PROJECT := Buggy
 OBJECTS += main.o
 OBJECTS += motors.o
 OBJECTS += sensors.o
-OBJECTS += pid.o
 
  SYS_OBJECTS += mbed/TARGET_NUCLEO_F401RE/TOOLCHAIN_GCC_ARM/PeripheralPins.o
  SYS_OBJECTS += mbed/TARGET_NUCLEO_F401RE/TOOLCHAIN_GCC_ARM/analogin_api.o
