@@ -28,8 +28,8 @@
 
 #define MAX 0.8
 #define MIN -1.2
-#define KP 1
-#define KD 0.005
+#define KP 0.8
+#define KD 0.05
 #define KI 0
 
 class Motor{
