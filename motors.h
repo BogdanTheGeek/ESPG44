@@ -4,7 +4,7 @@
 #include "pins.h"
 
 
-#define SERIAL_DEBUGx
+#define SERIAL_DEBUG
 
 #define X1              //select encoder precision
 
@@ -23,13 +23,13 @@
 #define WHEEL_DIA 80                    //wheel diameter in mm
 #define WHEEL_AXEL_LENGTH 166           //distance between centers of the wheels in mm
 #define PI 3.14159265359                //this is pi
-#define CHECK_SPEED_INTERVAL 0.06       //this is the update interval for the speed measurement ISR
+#define CHECK_SPEED_INTERVAL 0.1       //this is the update interval for the speed measurement ISR
 #define CHECK_DISTANCE_INTERVAL 0.02   //this is the update interval for the speed measurement ISR
 
 #define MAX 0.8
 #define MIN -1.2
 #define KP 1
-#define KD 0
+#define KD 0.005
 #define KI 0
 
 class Motor{

@@ -13,7 +13,7 @@ void Motor::speed_ISR(){
     distance_L += encoder_count_L * distance_calc_optim;
 
 #if defined(SERIAL_DEBUG)
-    serial->printf("Rs:%.2f Ls:%.2f Rd=%d Ld=%d %d %d %d\n\r", speed_R, speed_L, distance_R, distance_L, busy_L, busy_R, turning);
+    serial->printf("%.2f %.2f\n\r", speed_R, speed_L);
 #endif
 
     encoder_count_R = 0;
@@ -43,25 +43,25 @@ void Motor::update_speed_PID(){
     double PID_out_R = KP * error_R + KD * (error_R - last_error_R)/CHECK_SPEED_INTERVAL + KI * I_value_R;
 
     //add limitation of range
-    if (PID_out_L > MAX){
-    PID_out_L = MAX;
-    }
-    else if(PID_out_L < MIN){
-    PID_out_L = MIN;
-    }
-    if (PID_out_R > MAX){
-    PID_out_R = MAX;
-    }
-    else if(PID_out_R < MIN){
-    PID_out_R = MIN;
-    }
+    // if (PID_out_L > MAX){
+    // PID_out_L = MAX;
+    // }
+    // else if(PID_out_L < MIN){
+    // PID_out_L = MIN;
+    // }
+    // if (PID_out_R > MAX){
+    // PID_out_R = MAX;
+    // }
+    // else if(PID_out_R < MIN){
+    // PID_out_R = MIN;
+    // }
 
     //store error for next time use
     last_error_L = error_L;
     last_error_R = error_R;
 
-    pwm_L += PID_out_L;
-    pwm_R += PID_out_R;
+    pwm_L += PID_out_L/500.0;
+    pwm_R += PID_out_R/500.0;
 
 
     this->set_speed_L(pwm_L);
@@ -281,7 +281,7 @@ void Motor::encoder_fall_handler_LB(){
 Motor::Motor(void){
 
 #if defined(SERIAL_DEBUG)
-    serial = new Serial(USBTX, USBRX, 9600);
+    serial = new Serial(USBTX, USBRX, 115200);
 #endif
     //create objects form the pointers and assign their pins from pin.h
 
@@ -291,8 +291,8 @@ Motor::Motor(void){
     dir_L = new DigitalOut(DIR_L);
     motor_EN = new DigitalOut(MOTOR_EN);
 
-    motor_R->period(0.020);      //set the periods of the PWM signal
-    motor_L->period(0.020);
+    motor_R->period(0.002);      //set the periods of the PWM signal
+    motor_L->period(0.002);
 
     motor_R->write(1.0);     
     motor_L->write(1.0);

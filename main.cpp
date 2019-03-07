@@ -22,11 +22,17 @@ int main(void)
 
 			//*****Stop mode
 	case Stop:
-		motors->target_speed_L = 0;
-		motors->target_speed_L = 0;
 
-		while (motors->busy() == true) {wait(0.1);}
 
+		motors->target_speed_L = 200;
+		motors->target_speed_R = 200;
+
+		wait(5);
+		motors->target_speed_L = 0;
+		motors->target_speed_R = 0;
+		wait(5);
+
+		
 		break;
 
 		//******Follow mode
