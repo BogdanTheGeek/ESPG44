@@ -24,7 +24,7 @@ int main(void)
 {
 	Motor *motors = new Motor();
 	ScanLine *sensors = new ScanLine();
-	InterruptIn button(PC_2, PullUp);
+	InterruptIn button(BUTTON, PullUp);
 	button.rise(&run);
 
 	while(1)switch (WORKING_STATE){

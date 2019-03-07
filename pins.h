@@ -28,3 +28,4 @@
 #define SEN_EN		PC_3
 
 //POWER CONTROL
+#define BUTTON		PC_2
