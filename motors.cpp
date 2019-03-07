@@ -191,15 +191,15 @@ void Motor::turn(double degrees, double speed){
 }
 
 bool Motor::busy(void){
-    if(  ((busy_L == false) && (busy_R == false)) ||  ((speed_L == 0) && (speed_R == 0))  ){
+    if((busy_L == true) || (busy_R == true) || (turning == true) || (speed_L != 0) || (speed_R != 0)){
 
         if((busy_L == false) && (busy_R == false) && (turning == true)){
             turning = false;
         }
-        return false;
+        return true;
     }
     else{
-        return true;
+        return false;
     }
 }
 
