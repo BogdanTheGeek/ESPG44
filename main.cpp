@@ -11,28 +11,30 @@ enum working_state {
 
 double deflection_to_speed_diff(double deflection);
 
+void run() {
+	
+	WORKING_STATE = Follow;
+    wait(3);      //debounce
+}
+
 int main(void)
 {
 	enum working_state WORKING_STATE = Stop;
-	
+
 	Motor *motors = new Motor();
 	ScanLine *sensors = new ScanLine();
+	InterruptIn button(PC_2, PullUp);
+	button.rise(&run);
 
 	while(1)switch (WORKING_STATE){
 
 			//*****Stop mode
 	case Stop:
-
-
-		motors->target_speed_L = 200;
-		motors->target_speed_R = 200;
-
-		wait(5);
 		motors->target_speed_L = 0;
-		motors->target_speed_R = 0;
-		wait(5);
+		motors->target_speed_L = 0;
 
-		
+		while (motors->busy() == true) {wait(0.1);}
+
 		break;
 
 		//******Follow mode
