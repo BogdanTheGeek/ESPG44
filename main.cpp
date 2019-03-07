@@ -10,6 +10,8 @@ enum working_state {
 	Turning
 };
 
+enum working_state WORKING_STATE = Stop;
+
 double deflection_to_speed_diff(double deflection);
 
 void run() {
@@ -20,8 +22,6 @@ void run() {
 
 int main(void)
 {
-	enum working_state WORKING_STATE = Stop;
-
 	Motor *motors = new Motor();
 	ScanLine *sensors = new ScanLine();
 	InterruptIn button(PC_2, PullUp);
@@ -42,11 +42,11 @@ int main(void)
 	case Follow:
 		if(sensors->on_line() == true){
 
-			if(motors_>busy() == false){
+			if(motors->busy() == false){
 				motors->target_speed_R = BASE_SPEED;
 				motors->target_speed_L = BASE_SPEED; 
 			}
-			
+
 			sensors->scan();
 
 			double speed_diff;

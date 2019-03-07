@@ -42,20 +42,6 @@ void Motor::update_speed_PID(){
     double PID_out_L = KP * error_L + KD * (error_L - last_error_L)/CHECK_SPEED_INTERVAL + KI * I_value_L;
     double PID_out_R = KP * error_R + KD * (error_R - last_error_R)/CHECK_SPEED_INTERVAL + KI * I_value_R;
 
-    //add limitation of range
-    // if (PID_out_L > MAX){
-    // PID_out_L = MAX;
-    // }
-    // else if(PID_out_L < MIN){
-    // PID_out_L = MIN;
-    // }
-    // if (PID_out_R > MAX){
-    // PID_out_R = MAX;
-    // }
-    // else if(PID_out_R < MIN){
-    // PID_out_R = MIN;
-    // }
-
     //store error for next time use
     last_error_L = error_L;
     last_error_R = error_R;
@@ -63,6 +49,19 @@ void Motor::update_speed_PID(){
     pwm_L += PID_out_L/500.0;
     pwm_R += PID_out_R/500.0;
 
+    //add limitation of range
+    if (pwm_L > MAX){
+    pwm_L = MAX;
+    }
+    else if(pwm_L < MIN){
+    pwm_L = MIN;
+    }
+    if (pwm_R > MAX){
+    pwm_R = MAX;
+    }
+    else if(pwm_R < MIN){
+    pwm_R = MIN;
+    }
 
     this->set_speed_L(pwm_L);
     this->set_speed_R(pwm_R);
@@ -191,9 +190,9 @@ void Motor::turn(double degrees, double speed){
 }
 
 bool Motor::busy(void){
-    if(  ((busy_L == false) && (busy_R == false)) ||  ((speed_L == 0) && (speed_R == 0))  ){
+    if((busy_L == false && busy_R == false) || (speed_L == 0 && speed_R == 0)){
 
-        if((busy_L == false) && (busy_R == false) && (turning == true)){
+        if(busy_L == false && busy_R == false && turning == true){
             turning = false;
         }
         return false;
