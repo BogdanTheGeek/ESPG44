@@ -1,7 +1,8 @@
 #include "motors.h"
 #include "sensors.h"
 
-#define DEFLECTION_COEFF 100
+#define DEFLECTION_COEFF 	100
+#define BASE_SPEED 			200
 
 enum working_state {
 	Stop,
@@ -28,7 +29,7 @@ int main(void)
 
 	while(1)switch (WORKING_STATE){
 
-			//*****Stop mode
+//Stop mode
 	case Stop:
 		motors->target_speed_L = 0;
 		motors->target_speed_L = 0;
@@ -37,9 +38,15 @@ int main(void)
 
 		break;
 
-		//******Follow mode
+//Follow mode
 	case Follow:
 		if(sensors->on_line() == true){
+
+			if(motors_>busy() == false){
+				motors->target_speed_R = BASE_SPEED;
+				motors->target_speed_L = BASE_SPEED; 
+			}
+			
 			sensors->scan();
 
 			double speed_diff;
@@ -60,7 +67,7 @@ int main(void)
 
 		break;
 
-		//******Turning mode
+//Turning mode
 	case Turning:
 
 		motors->turn(180, 0.2);
