@@ -1,4 +1,4 @@
-main.o: ../main.cpp ../mbed_config.h ../motors.h ../mbed/mbed.h \
+main.o: ../main.cpp ../mbed_config.h ../sensors.h ../mbed/mbed.h \
  ../mbed/platform/mbed_version.h ../mbed/platform/mbed_toolchain.h \
  ../mbed/platform/mbed_preprocessor.h ../mbed/platform/platform.h \
  ../mbed/platform/mbed_retarget.h ../mbed/platform/mbed_toolchain.h \

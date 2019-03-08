@@ -27,4 +27,7 @@
 #define SEN_DATA    PC_15
 #define SEN_EN		PC_3
 
-//POWER CONTROL
+//CONTROL
+#define BUTTON		PC_2
+#define BLE_TX		PA_2
+#define BLE_RX		PA_3
