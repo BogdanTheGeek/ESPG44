@@ -2,7 +2,7 @@
 #include "mbed.h"
 #include "pins.h"
 
-#define PROPAGTION_DELAY    0.005
+#define PROPAGTION_DELAY    0.001
 #define LINE_THRESHOLD      0.3
 
 //this class represents and individual sensor

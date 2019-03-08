@@ -1,8 +1,8 @@
 #include "motors.h"
 #include "sensors.h"
 
-#define DEFLECTION_COEFF 	100
-#define BASE_SPEED 			200
+#define DEFLECTION_COEFF 	70
+#define BASE_SPEED 			70
 
 enum working_state {
 	Stop,
@@ -27,43 +27,46 @@ int main(void)
 	InterruptIn button(BUTTON, PullUp);
 	button.rise(&run);
 
+	bool go = true;
+
 	while(1)switch (WORKING_STATE){
 
 //Stop mode
 	case Stop:
 		motors->target_speed_L = 0;
-		motors->target_speed_L = 0;
-
-		while (motors->busy() == true) {wait(0.1);}
+		motors->target_speed_R = 0;
+		motors->set_speed_L(0);
+		motors->set_speed_R(0);
 
 		break;
 
 //Follow mode
 	case Follow:
-		if(sensors->on_line() == true){
+		//if(sensors->on_line() == true){
 
-			if(motors->busy() == false){
+			if(go == true){
 				motors->target_speed_R = BASE_SPEED;
 				motors->target_speed_L = BASE_SPEED; 
+				go = false;
+				wait(0.2);
 			}
 
 			sensors->scan();
 
 			double speed_diff;
-			speed_diff = deflection_to_speed_diff(sensors->array_to_value_V2());
+			speed_diff = deflection_to_speed_diff(sensors->array_to_value_V1());
 
-			motors->target_speed_R -= speed_diff;
-			motors->target_speed_L += speed_diff; 
-		}else{
-			//check if it is a gap or the end of the line
-			wait(0.2);
-			if(sensors->on_line() == false){
-				WORKING_STATE = Turning;
-				break;
-			}
-			//optional rear sensor check
-			//
-		}
+			motors->target_speed_R = BASE_SPEED - speed_diff;
+			motors->target_speed_L = BASE_SPEED + speed_diff; 
+		// }else{
+		// 	//check if it is a gap or the end of the line
+		// 	wait(0.2);
+		// 	if(sensors->on_line() == false){
+		// 		WORKING_STATE = Stop;
+		// 	}
+		// 	//optional rear sensor check
+		// 	//
+		//}
 
 		break;
 
@@ -81,7 +84,8 @@ int main(void)
 
 double deflection_to_speed_diff(double deflection){
 
-	double speed_diff = deflection * DEFLECTION_COEFF;
+	double speed_diff ;
+	speed_diff = deflection * DEFLECTION_COEFF;
 
 	return	speed_diff;
 }
