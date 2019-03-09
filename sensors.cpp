@@ -170,3 +170,26 @@ double ScanLine::array_to_value_V2(void){
 
     return value;
 }
+
+bool ScanLine::on_line(void){
+
+    //find the highest and lowest values in the scanline
+    double max = 0;
+    double min = 1;
+
+    for (int i = 1; i < n_sensor; i++){
+
+        if(values[i] > max){
+            max = values[i];
+        }
+        if(values[i] < min){
+            min = values[i];
+        }
+    }
+
+    if ((max-min) < LINE_THRESHOLD){
+        return false;
+    }else{
+        return true;
+    }
+}

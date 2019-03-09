@@ -2,7 +2,8 @@
 #include "mbed.h"
 #include "pins.h"
 
-#define PROPAGTION_DELAY 0.005
+#define PROPAGTION_DELAY    0.005
+#define LINE_THRESHOLD      0.3
 
 //this class represents and individual sensor
 class Sensor{
@@ -40,4 +41,5 @@ class ScanLine{
     double array_to_value_V1(void);    //convert the array to one directional value between -1 and 1 using interpolation
     double array_to_value_V2(void);    //convert the array to one directional value between -1 and 1 using weighted average
     
+    bool on_line(void);
 };
