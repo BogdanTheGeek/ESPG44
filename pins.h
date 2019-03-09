@@ -29,5 +29,5 @@
 
 //CONTROL
 #define BUTTON		PC_2
-#define BLE_TX		PA_2
-#define BLE_RX		PA_3
+#define BLETX 		PC_6
+#define BLERX 		PC_7
