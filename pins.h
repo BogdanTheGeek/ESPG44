@@ -27,4 +27,7 @@
 #define SEN_DATA    PC_15
 #define SEN_EN		PC_3
 
-//POWER CONTROL
+//CONTROL
+#define BUTTON		PC_2
+#define BLETX 		PC_6
+#define BLERX 		PC_7
