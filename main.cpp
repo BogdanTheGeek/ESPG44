@@ -29,7 +29,7 @@ int main() {
 		break;
 		
 		case 1:
-			serial.printf("Position: %.3f\n\r", sensors->array_to_value_V2());
+			serial.printf("Position: %.3f\n\r", sensors->array_to_value_V1());
 		break;
 		}
 
