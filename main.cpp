@@ -23,22 +23,12 @@ bool go = true;
 
 double deflection_to_speed_diff(double deflection);
 
-// void run() {
-	
-// 	WORKING_STATE = Follow;
-// 	go = true;
-//     wait(3);      //debounce
-// }
-
 int main(void)
 {
 	Motor *motors = new Motor();
 	ScanLine *sensors = new ScanLine();
 
 	hm10.attach(&bluetooth_handler, Serial::RxIrq);
-
-	//InterruptIn button(BUTTON, PullUp);
-	//button.rise(&run);
 
 	while(1)switch (WORKING_STATE){
 
@@ -48,7 +38,6 @@ int main(void)
 		motors->target_speed_R = 0;
 		motors->set_speed_L(0);
 		motors->set_speed_R(0);
-		go = true;
 
 		break;
 

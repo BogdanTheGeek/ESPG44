@@ -31,5 +31,5 @@
 #define BUTTON		PC_2
 
 // BLE
-#define BLETX PC_6
-#define BLERX PC_7
+#define BLETX 		PC_6
+#define BLERX 		PC_7
