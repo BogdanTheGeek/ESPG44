@@ -19,7 +19,9 @@ void Motor::speed_ISR(){
     encoder_count_R = 0;
     encoder_count_L = 0;
     
-    this->update_speed_PID();
+    if(!turning){
+        this->update_speed_PID();
+    }
 }
 
 void Motor::update_speed_PID(){
@@ -174,15 +176,19 @@ void Motor::check_distance_L(){
 
 void Motor::turn(double degrees, double speed){
 
+    turning = true;
+
+    this->set_speed_L(0);
+    this->set_speed_R(0);
+
     long distance = (degrees/360.0)*(PI*WHEEL_AXEL_LENGTH);
 
-    if (degrees >= 0){
-        distance = distance - 20;
-    }else{
-        distance = distance + 20;
-    }
+    // if (degrees >= 0){
+    //     distance = distance - 20;
+    // }else{
+    //     distance = distance + 20;
+    // }
 
-    turning = true;
 
     this->move_distance_R(-distance, speed);
     this->move_distance_L(distance, speed);    
