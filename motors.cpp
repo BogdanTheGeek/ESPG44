@@ -19,7 +19,7 @@ void Motor::speed_ISR(){
     encoder_count_R = 0;
     encoder_count_L = 0;
     
-    if(!turning){
+    if(turning == false){
         this->update_speed_PID();
     }
 }
