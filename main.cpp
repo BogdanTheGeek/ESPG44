@@ -43,42 +43,44 @@ int main(void)
 
 //Follow mode
 	case Follow:
-		if(/*sensors->on_line() ==*/ true){
 
-			if(go == true && motors->busy() == false){
-				motors->target_speed_R = BASE_SPEED;
-				motors->target_speed_L = BASE_SPEED; 
-				go = false;
-				wait(0.2);
-			}
-
-			sensors->scan();
-
-			double speed_diff;
-			speed_diff = deflection_to_speed_diff(sensors->array_to_value_V1());
-
-			motors->target_speed_R = BASE_SPEED - speed_diff;
-			motors->target_speed_L = BASE_SPEED + speed_diff; 
-		}else{
-			//check if it is a gap or the end of the line
-			wait(0.2);
-			if(sensors->on_line() == false){
-				WORKING_STATE = Stop;
-			}
-			//optional rear sensor check
-			//
+		if(sensors->on_line() == false){
+			WORKING_STATE = Turning;
+			go = true;
 		}
 
-		break;
+
+		if(go == true && motors->busy() == false){
+			motors->target_speed_R = BASE_SPEED;
+			motors->target_speed_L = BASE_SPEED; 
+			go = false;
+			wait(0.2);
+		}
+
+		sensors->scan();
+
+		double speed_diff;
+		speed_diff = deflection_to_speed_diff(sensors->array_to_value_V1());
+
+		motors->target_speed_R = BASE_SPEED - speed_diff;
+		motors->target_speed_L = BASE_SPEED + speed_diff; 
+
+	break;
 
 //Turning mode
 	case Turning:
 
-		motors->turn(180, 0.3);
-		while (motors->busy() == true) {wait(0.01);}
-		
-		WORKING_STATE = Follow;
 
+		if(sensors->on_line() == false){
+			motors->turn(5, 0.3);
+			while (motors->busy() == true) {wait(0.01);}
+			sensors->scan();
+
+		}else{
+
+			WORKING_STATE = Follow;
+		}
+		
 		break;
 	}
 }
