@@ -12,6 +12,9 @@
 void bluetooth_handler(void);
 Serial hm10(BLETX, BLERX, 9600);
 
+Motor *motors = new Motor();
+ScanLine *sensors = new ScanLine();
+
 enum working_state {
 	Stop,
 	Follow,
@@ -25,9 +28,6 @@ double deflection_to_speed_diff(double deflection);
 
 int main(void)
 {
-	Motor *motors = new Motor();
-	ScanLine *sensors = new ScanLine();
-
 	hm10.attach(&bluetooth_handler, Serial::RxIrq);
 
 	while(1)switch (WORKING_STATE){
@@ -69,8 +69,7 @@ int main(void)
 
 //Turning mode
 	case Turning:
-
-
+	
 		if(sensors->on_line() == false){
 			motors->turn(5, 0.3);
 			while (motors->busy() == true) {wait(0.01);}
@@ -112,6 +111,8 @@ void bluetooth_handler(void){
 		return;
 	}
 	if(strcmp(buffer, TURN_key) == 0){ 
+		motors->turn(90, 0.3);
+		while (motors->busy() == true) {wait(0.01);}
 		WORKING_STATE = Turning;
 		go = true;
 		return;
