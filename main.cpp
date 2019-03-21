@@ -111,8 +111,6 @@ void bluetooth_handler(void){
 		return;
 	}
 	if(strcmp(buffer, TURN_key) == 0){ 
-		motors->turn(90, 0.3);
-		while (motors->busy() == true) {wait(0.01);}
 		WORKING_STATE = Turning;
 		go = true;
 		return;
