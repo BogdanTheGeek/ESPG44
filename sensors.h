@@ -2,8 +2,8 @@
 #include "mbed.h"
 #include "pins.h"
 
-#define PROPAGTION_DELAY    0.005
-#define LINE_THRESHOLD      0.3
+#define PROPAGTION_DELAY    0.0001
+#define LINE_THRESHOLD      0.1
 
 //this class represents and individual sensor
 class Sensor{

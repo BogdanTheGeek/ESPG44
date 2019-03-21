@@ -136,4 +136,4 @@ main.o: ../main.cpp ../mbed_config.h ../motors.h ../mbed/mbed.h \
  ../mbed/platform/CriticalSectionLock.h ../mbed/platform/DeepSleepLock.h \
  ../mbed/platform/mbed_stats.h ../mbed/platform/Callback.h \
  ../mbed/platform/FunctionPointer.h ../mbed/platform/ScopedLock.h \
- ../pins.h
+ ../pins.h ../sensors.h
