@@ -4,11 +4,9 @@
 #include "pins.h"
 
 
-#define BB_COEF 0.01;   //bang bang coeddiciant
-
 #define SERIAL_DEBUGx
 
-#define X4              //select encoder precision
+#define X2              //select encoder precision
 
 #ifdef X1
 #define PPR 256.0                  //this is the number of pulses per revolution in X1
@@ -25,9 +23,14 @@
 #define WHEEL_DIA 80                    //wheel diameter in mm
 #define WHEEL_AXEL_LENGTH 166           //distance between centers of the wheels in mm
 #define PI 3.14159265359                //this is pi
-#define CHECK_SPEED_INTERVAL 0.06       //this is the update interval for the speed measurement ISR
+#define CHECK_SPEED_INTERVAL 0.02       //this is the update interval for the speed measurement ISR
 #define CHECK_DISTANCE_INTERVAL 0.02   //this is the update interval for the speed measurement ISR
 
+#define MAX  0.8
+#define MIN -0.8
+#define KP   0.7
+#define KD   0.03
+#define KI   0
 
 class Motor{
 
@@ -50,7 +53,7 @@ class Motor{
     int encoder_count_R, encoder_count_L;
     
     //store the current speeds and the target speeds
-    double speed_L, speed_R, target_speed_L, target_speed_R;
+    double speed_L, speed_R;
 
     //Serial object pointer used for debuging
     Serial *serial;
@@ -61,7 +64,6 @@ class Motor{
     void speed_ISR();      //speed calculation ISR
 
     void update_speed_PID();    //PID
-    void update_speed_BB();     //bang bang
 
     void check_distance_R();
     void check_distance_L();
@@ -82,15 +84,13 @@ class Motor{
     public:  
 
     //store distance traveled
-    long distance_L, distance_R;  
+    long distance_L, distance_R;
+    double target_speed_L, target_speed_R;
     
     Motor(void);            //initialisation function
-    
+
     void set_speed_R(double speed);
     void set_speed_L(double speed);
-    
-    void set_target_speed(double new_target_speed_L, double new_target_speed_R);    //set the target speed for the PID
-    void move_constant_speed(double new_speed_L, double new_speed_R);     //move with no encoder feedback, arguments 0-1.0 sign gives direction
     
     void move_distance_R(long distance, double speed);            //move the right wheel a certain distance
     void move_distance_L(long distance, double speed);            //move the left wheel a certain distance
