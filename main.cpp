@@ -3,6 +3,7 @@
 
 #define DEFLECTION_COEFF 	70
 #define BASE_SPEED 			200
+#define LINE_GAP 			20
 
 #define ON_key	 "44GO44"
 #define OFF_key  "44STOP"
@@ -22,9 +23,9 @@ enum working_state {
 };
 
 enum working_state WORKING_STATE = Stop;
-bool go = true;
 
 double deflection_to_speed_diff(double deflection);
+void line_break_check(void);
 
 int main(void)
 {
@@ -44,18 +45,24 @@ int main(void)
 //Follow mode
 	case Follow:
 
-		if(sensors->on_line() == false){
-			WORKING_STATE = Turning;
-			go = true;
+		static long gap_start_dist = 0;
+
+		if(sensors->on_line() == true){
+			gap_start_dist = motors->distance_L;
+		}else{
+			if(motors->distance_L > gap_start_dist + LINE_GAP){
+				WORKING_STATE = Turning;
+			}
+
 		}
 
 
-		if(go == true && motors->busy() == false){
-			motors->target_speed_R = BASE_SPEED/2;
-			motors->target_speed_L = BASE_SPEED/2; 
-			go = false;
-			wait(0.1);
-		}
+		// if(go == true && motors->busy() == false){
+		// 	motors->target_speed_R = BASE_SPEED/3;
+		// 	motors->target_speed_L = BASE_SPEED/3; 
+		// 	go = false;
+		// 	wait(0.1);
+		// }
 
 		sensors->scan();
 
@@ -63,7 +70,7 @@ int main(void)
 		speed_diff = deflection_to_speed_diff(sensors->array_to_value_V1());
 
 		motors->target_speed_R = BASE_SPEED - speed_diff;
-		motors->target_speed_L = BASE_SPEED + speed_diff; 
+		motors->target_speed_L = BASE_SPEED + speed_diff;
 
 	break;
 
@@ -71,7 +78,7 @@ int main(void)
 	case Turning:
 	
 		if(sensors->on_line() == false){
-			motors->turn(5, 0.3);
+			motors->turn(5, 0.25);
 			while (motors->busy() == true) {wait(0.01);}
 			sensors->scan();
 
@@ -102,17 +109,14 @@ void bluetooth_handler(void){
 
 	if(strcmp(buffer, ON_key) == 0){ 
 	    WORKING_STATE = Follow;
-	    go = true;
 	   	return;
 	}
 	if(strcmp(buffer, OFF_key) == 0){ 
 		WORKING_STATE = Stop;
-		go = true;
 		return;
 	}
 	if(strcmp(buffer, TURN_key) == 0){ 
 		WORKING_STATE = Turning;
-		go = true;
 		return;
 	}
 
