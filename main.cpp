@@ -2,7 +2,7 @@
 #include "sensors.h"
 
 #define DEFLECTION_COEFF 	70
-#define BASE_SPEED 			70
+#define BASE_SPEED 			200
 
 #define ON_key	 "44GO44"
 #define OFF_key  "44STOP"
@@ -51,10 +51,10 @@ int main(void)
 
 
 		if(go == true && motors->busy() == false){
-			motors->target_speed_R = BASE_SPEED;
-			motors->target_speed_L = BASE_SPEED; 
+			motors->target_speed_R = BASE_SPEED/2;
+			motors->target_speed_L = BASE_SPEED/2; 
 			go = false;
-			wait(0.2);
+			wait(0.1);
 		}
 
 		sensors->scan();
