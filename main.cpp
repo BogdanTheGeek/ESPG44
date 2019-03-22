@@ -31,6 +31,8 @@ int main(void)
 {
 	hm10.attach(&bluetooth_handler, Serial::RxIrq);
 
+	float direction = 1;
+
 	while(1)switch (WORKING_STATE){
 
 //Stop mode
@@ -69,6 +71,12 @@ int main(void)
 		double speed_diff;
 		speed_diff = deflection_to_speed_diff(sensors->array_to_value_V1());
 
+		if(speed_diff >= 0){
+			direction = 1;
+		}else{
+			direction = -1;
+		}
+
 		motors->target_speed_R = BASE_SPEED - speed_diff;
 		motors->target_speed_L = BASE_SPEED + speed_diff;
 
@@ -76,12 +84,10 @@ int main(void)
 
 //Turning mode
 	case Turning:
-	
+		sensors->scan();
 		if(sensors->on_line() == false){
-			motors->turn(5, 0.25);
-			while (motors->busy() == true) {wait(0.01);}
-			sensors->scan();
-
+			motors->turn(direction, 0.25);
+			while (motors->busy() == true) {wait(0.0001);}
 		}else{
 
 			WORKING_STATE = Follow;
