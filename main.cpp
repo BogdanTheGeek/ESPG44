@@ -25,7 +25,6 @@ enum working_state {
 enum working_state WORKING_STATE = Stop;
 
 double deflection_to_speed_diff(double deflection);
-void line_break_check(void);
 
 int main(void)
 {
