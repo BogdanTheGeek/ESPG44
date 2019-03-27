@@ -2,7 +2,7 @@
 #include "sensors.h"
 
 #define DEFLECTION_COEFF 	70
-#define BASE_SPEED 			100
+#define BASE_SPEED 			140
 #define LINE_GAP 			20
 
 #define ON_key	 "44GO44"
@@ -15,6 +15,7 @@ Serial hm10(BLETX, BLERX, 9600);
 
 Motor *motors = new Motor();
 ScanLine *sensors = new ScanLine();
+bool turn_on_line = false;
 
 enum working_state {
 	Stop,
@@ -69,8 +70,13 @@ int main(void)
 //Turning mode
 	case Turning:
 
-		sensors->scan();
 
+		if(turn_on_line == true){
+			motors->turn(90, 0.3);
+			wait(0.5);
+			turn_on_line = false;
+		}
+		sensors->scan();
 		if(sensors->on_line() == false){
 			motors->turn(5, 0.3);
 			while (motors->busy() == true) {wait(0.01);}	
@@ -108,9 +114,8 @@ void bluetooth_handler(void){
 		return;
 	}
 	if(strcmp(buffer, TURN_key) == 0){
-		motors->turn(90, 0.3);
-		while (motors->busy() == true) {wait(0.01);} 
 		WORKING_STATE = Turning;
+		turn_on_line = true;
 		return;
 	}
 
