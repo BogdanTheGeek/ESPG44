@@ -2,7 +2,7 @@
 #include "sensors.h"
 
 #define DEFLECTION_COEFF 	70
-#define BASE_SPEED 			70
+#define BASE_SPEED 			200 //after test this might be the max speed for normal tracking
 
 #define ON_key	 "44GO44"
 #define OFF_key  "44STOP"
