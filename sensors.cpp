@@ -166,7 +166,7 @@ double ScanLine::array_to_value_V2(void){
 
     double value;
 
-    value = (-1*values[1] - 0.5*values[2] + 0.5*values[4] + values[5])/(values[1] + values[2] + values[3] + values[4] + values[5]);
+    value = (-1.2*values[1] - 0.5*values[2] + 0.5*values[4] + 1.2*values[5])/(values[1] + values[2] + values[3] + values[4] + values[5]);
 
     return value;
 }

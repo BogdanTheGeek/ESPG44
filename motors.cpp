@@ -296,8 +296,8 @@ Motor::Motor(void){
     dir_L = new DigitalOut(DIR_L);
     motor_EN = new DigitalOut(MOTOR_EN);
 
-    motor_R->period(0.002);      //set the periods of the PWM signal
-    motor_L->period(0.002);
+    motor_R->period(0.001);      //set the periods of the PWM signal
+    motor_L->period(0.001);
 
     motor_R->write(1.0);     
     motor_L->write(1.0);

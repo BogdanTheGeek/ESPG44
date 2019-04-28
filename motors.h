@@ -26,10 +26,10 @@
 #define CHECK_SPEED_INTERVAL 0.02       //this is the update interval for the speed measurement ISR
 #define CHECK_DISTANCE_INTERVAL 0.02   //this is the update interval for the speed measurement ISR
 
-#define MAX  0.8
-#define MIN -0.8
-#define KP   0.7
-#define KD   0.03
+#define MAX  0.9
+#define MIN -0.9
+#define KP   0.8
+#define KD   0.06
 #define KI   0
 
 class Motor{

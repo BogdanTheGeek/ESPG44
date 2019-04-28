@@ -1,8 +1,8 @@
 #include "motors.h"
 #include "sensors.h"
 
-#define DEFLECTION_COEFF 	70
-#define BASE_SPEED 			200
+#define DEFLECTION_COEFF 	250
+#define BASE_SPEED 			370
 #define LINE_GAP 			20
 
 #define ON_key	 "44GO44"
@@ -23,6 +23,8 @@ enum working_state {
 };
 
 enum working_state WORKING_STATE = Stop;
+
+double last_array_value;
 
 double deflection_to_speed_diff(double deflection);
 
@@ -46,38 +48,52 @@ int main(void)
 //Follow mode
 	case Follow:
 
+		sensors->scan();
+
+		double speed_diff, array_value;
+
+		array_value = sensors->array_to_value_V2();
+
 		static long gap_start_dist = 0;
 
 		if(sensors->on_line() == true){
 			gap_start_dist = motors->distance_L;
+			last_array_value = array_value;
 		}else{
-			if(motors->distance_L > gap_start_dist + LINE_GAP){
-				WORKING_STATE = Turning;
+			if (last_array_value >= 0){
+				last_array_value = 1.0;
+			}else{
+				last_array_value = -1.0;
 			}
-
 		}
+		//else{
+		// 	if(motors->distance_L > gap_start_dist + LINE_GAP){
+		// 		//WORKING_STATE = Turning;
 
+		// 	}
 
-		// if(go == true && motors->busy() == false){
-		// 	motors->target_speed_R = BASE_SPEED/3;
-		// 	motors->target_speed_L = BASE_SPEED/3; 
-		// 	go = false;
-		// 	wait(0.1);
 		// }
 
-		sensors->scan();
-
-		double speed_diff;
-		speed_diff = deflection_to_speed_diff(sensors->array_to_value_V1());
+		speed_diff = deflection_to_speed_diff(last_array_value);
 
 		if(speed_diff >= 0){
 			direction = 1;
 		}else{
 			direction = -1;
 		}
+		
+		double START_SPEED;
 
-		motors->target_speed_R = BASE_SPEED - speed_diff;
-		motors->target_speed_L = BASE_SPEED + speed_diff;
+		if (motors->distance_L < 100){
+			START_SPEED = BASE_SPEED*0.25;
+		}else if (motors->distance_L < 200){
+			START_SPEED = BASE_SPEED*0.75;
+		}else{
+			START_SPEED = BASE_SPEED;
+		}
+
+		motors->target_speed_R = START_SPEED - speed_diff;
+		motors->target_speed_L = START_SPEED + speed_diff;
 
 	break;
 
