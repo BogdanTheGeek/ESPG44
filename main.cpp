@@ -28,20 +28,31 @@ double last_array_value;
 
 double deflection_to_speed_diff(double deflection);
 
+bool turn = false;
+
 int main(void)
 {
 	hm10.attach(&bluetooth_handler, Serial::RxIrq);
-
-	float direction = 1;
 
 	while(1)switch (WORKING_STATE){
 
 //Stop mode
 	case Stop:
+		//hm10.printf("stop");
+		motors->distance_L = 0;
+
 		motors->target_speed_L = 0;
 		motors->target_speed_R = 0;
 		motors->set_speed_L(0);
 		motors->set_speed_R(0);
+
+		if (turn == true){
+			turn = false;
+			wait(0.5);
+			motors->turn(100, 0.3);
+			wait(0.5);
+			WORKING_STATE = Turning;
+		}
 
 		break;
 
@@ -75,19 +86,11 @@ int main(void)
 		// }
 
 		speed_diff = deflection_to_speed_diff(last_array_value);
-
-		if(speed_diff >= 0){
-			direction = 1;
-		}else{
-			direction = -1;
-		}
 		
 		double START_SPEED;
 
-		if (motors->distance_L < 100){
-			START_SPEED = BASE_SPEED*0.25;
-		}else if (motors->distance_L < 200){
-			START_SPEED = BASE_SPEED*0.75;
+		if (motors->distance_L < 80){
+			START_SPEED = BASE_SPEED*0.3;
 		}else{
 			START_SPEED = BASE_SPEED;
 		}
@@ -99,13 +102,16 @@ int main(void)
 
 //Turning mode
 	case Turning:
+	//hm10.printf("turn");
 		sensors->scan();
 		if(sensors->on_line() == false){
-			motors->turn(direction, 0.25);
+			motors->turn(1, 0.3);
 			while (motors->busy() == true) {wait(0.0001);}
+
 		}else{
 
 			WORKING_STATE = Follow;
+			//hm10.printf("follow");
 		}
 		
 		break;
@@ -137,7 +143,8 @@ void bluetooth_handler(void){
 		return;
 	}
 	if(strcmp(buffer, TURN_key) == 0){ 
-		WORKING_STATE = Turning;
+		WORKING_STATE = Stop;
+		turn = true;
 		return;
 	}
 
