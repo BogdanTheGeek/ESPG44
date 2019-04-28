@@ -13,6 +13,9 @@
 void bluetooth_handler(void);
 Serial hm10(BLETX, BLERX, 9600);
 
+void start(void);
+InterruptIn button(BUTTON, PullUp);
+
 Motor *motors = new Motor();
 ScanLine *sensors = new ScanLine();
 
@@ -33,6 +36,7 @@ bool turn = false;
 int main(void)
 {
 	hm10.attach(&bluetooth_handler, Serial::RxIrq);
+	button.rise(&start);
 
 	while(1)switch (WORKING_STATE){
 
@@ -71,21 +75,22 @@ int main(void)
 			gap_start_dist = motors->distance_L;
 			last_array_value = array_value;
 		}else{
-			if (last_array_value >= 0){
-				last_array_value = 1.0;
+			if(motors->distance_L > (gap_start_dist + LINE_GAP)){
+				
+				if (last_array_value < 0.4 && last_array_value > -0.4){
+					WORKING_STATE = Stop;
+				}
 			}else{
-				last_array_value = -1.0;
+				if (last_array_value >= 0){
+					array_value = 1.0;
+				}else{
+					array_value = -1.0;
+				}
 			}
+
 		}
-		//else{
-		// 	if(motors->distance_L > gap_start_dist + LINE_GAP){
-		// 		//WORKING_STATE = Turning;
 
-		// 	}
-
-		// }
-
-		speed_diff = deflection_to_speed_diff(last_array_value);
+		speed_diff = deflection_to_speed_diff(array_value);
 		
 		double START_SPEED;
 
@@ -149,4 +154,9 @@ void bluetooth_handler(void){
 	}
 
 	return;
+}
+
+void start(void){
+
+	WORKING_STATE = Follow;
 }
