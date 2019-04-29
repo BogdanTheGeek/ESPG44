@@ -96,6 +96,8 @@ int main(void)
 
 		if (motors->distance_L < 80){
 			START_SPEED = BASE_SPEED*0.25;
+		}else if (motors->distance_L < 160){
+			START_SPEED = BASE_SPEED*0.6;
 		}else{
 			START_SPEED = BASE_SPEED;
 		}
@@ -114,7 +116,7 @@ int main(void)
 			while (motors->busy() == true) {wait(0.0001);}
 
 		}else{
-
+			motors->distance_L = 0;
 			WORKING_STATE = Follow;
 			//hm10.printf("follow");
 		}
