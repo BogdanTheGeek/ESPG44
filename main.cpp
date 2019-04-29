@@ -1,8 +1,8 @@
 #include "motors.h"
 #include "sensors.h"
 
-#define DEFLECTION_COEFF 	250
-#define BASE_SPEED 			370
+#define DEFLECTION_COEFF 	180
+#define BASE_SPEED 			310
 #define LINE_GAP 			20
 
 #define ON_key	 "44GO44"
@@ -95,7 +95,7 @@ int main(void)
 		double START_SPEED;
 
 		if (motors->distance_L < 80){
-			START_SPEED = BASE_SPEED*0.3;
+			START_SPEED = BASE_SPEED*0.25;
 		}else{
 			START_SPEED = BASE_SPEED;
 		}

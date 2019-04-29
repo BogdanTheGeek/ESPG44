@@ -73,11 +73,11 @@ void Motor::update_speed_PID(){
 void Motor::set_speed_R(double speed){
 
     if(speed >= 0){        //set the direction of the motors depending on the sign of the speed
-        dir_R->write(1);
+        dir_R->write(0);
    		motor_R->write(1.0 - speed);
     }
     else if(speed < 0){
-        dir_R->write(0);
+        dir_R->write(1);
     	motor_R->write(1.0 + speed);
     }
 }
