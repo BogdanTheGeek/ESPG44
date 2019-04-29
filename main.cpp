@@ -77,17 +77,17 @@ int main(void)
 		}else{
 			if(motors->distance_L > (gap_start_dist + LINE_GAP)){
 				
-				if (last_array_value < 0.4 && last_array_value > -0.4){
+				if (last_array_value < 0.3 && last_array_value > -0.3){
 					WORKING_STATE = Stop;
-				}
-			}else{
-				if (last_array_value >= 0){
-					array_value = 1.0;
-				}else{
-					array_value = -1.0;
 				}
 			}
 
+			if (last_array_value >= 0){
+				array_value = 1.0;
+			}else{
+				array_value = -1.0;
+			}
+			
 		}
 
 		speed_diff = deflection_to_speed_diff(array_value);
