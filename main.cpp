@@ -1,8 +1,8 @@
 #include "motors.h"
 #include "sensors.h"
 
-#define DEFLECTION_COEFF 	180
-#define BASE_SPEED 			310
+#define DEFLECTION_COEFF 	200
+#define BASE_SPEED 			335
 #define LINE_GAP 			20
 
 #define ON_key	 "44GO44"
@@ -52,9 +52,9 @@ int main(void)
 
 		if (turn == true){
 			turn = false;
-			wait(0.5);
+			wait(0.3);
 			motors->turn(100, 0.3);
-			wait(0.5);
+			wait(0.4);
 			WORKING_STATE = Turning;
 		}
 
@@ -112,7 +112,7 @@ int main(void)
 	//hm10.printf("turn");
 		sensors->scan();
 		if(sensors->on_line() == false){
-			motors->turn(1, 0.3);
+			motors->turn(1, 0.35);
 			while (motors->busy() == true) {wait(0.0001);}
 
 		}else{
